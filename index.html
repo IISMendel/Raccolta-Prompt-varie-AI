@@ -117,8 +117,8 @@
                     <div class="text-xs font-bold uppercase text-teal-600 mb-1">Passo 2</div>
                     <h3 class="font-bold text-slate-900 mb-2">Ottimizzazione Stile</h3>
                     <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
-                        <li>Imposta il <b>Response Style</b> su <i>Learning Guide</i>.</li>
-                        <li>Imposta la <b>Response Length</b> su <i>Longer</i> per analisi approfondite.</li>
+                        <li>Imposta il <b>Response Style</b> (Stile di risposta) su <i>Learning Guide</i> (Guida all'apprendimento).</li>
+                        <li>Imposta la <b>Response Length</b> (Lunghezza della risposta) su <i>Longer</i> (Più lunga) per analisi approfondite.</li>
                     </ul>
                 </div>
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
@@ -215,9 +215,9 @@
 
             <!-- 25 Workspace Prompts -->
             <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
-                <i data-lucide="layout-grid" class="w-5 h-5 text-blue-600"></i> 25 Gemini Prompts for Google Workspace
+                <i data-lucide="layout-grid" class="w-5 h-5 text-blue-600"></i> 25 Prompt Gemini per Google Workspace
             </h3>
-            <p class="text-xs text-slate-500 mb-4">Formula base: <b>Role + Task + Context + Output Format</b></p>
+            <p class="text-xs text-slate-500 mb-4">Formula base: <b>Ruolo + Compito + Contestualizzazione + Formato di Output</b></p>
             <div id="workspace-container" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
         </div>
 
@@ -257,13 +257,13 @@
         <div id="tab-generici" class="tab-content hidden">
             <div class="mb-8 bg-purple-50 border border-purple-200 rounded-2xl p-6">
                 <h2 class="text-xl font-bold text-purple-900 flex items-center gap-2 mb-2">
-                    <i data-lucide="graduation-cap" class="w-6 h-6 text-purple-600"></i> AI Teaching System & Padronanza Competenze
+                    <i data-lucide="graduation-cap" class="w-6 h-6 text-purple-600"></i> Sistema Didattico IA & Padronanza Competenze
                 </h2>
                 <p class="text-purple-800 text-sm">Sistemi di progettazione didattica, analisi capitoli e roadmap universali per la padronanza in 30 giorni.</p>
             </div>
 
             <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <i data-lucide="book-open-check" class="w-5 h-5 text-purple-600"></i> AI Teaching System (Progettazione Lezioni e Didattica)
+                <i data-lucide="book-open-check" class="w-5 h-5 text-purple-600"></i> Sistema Didattico IA (Progettazione Lezioni e Didattica)
             </h3>
             <div id="teaching-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"></div>
 
@@ -465,31 +465,31 @@
 
             // 25 Workspace Prompts
             const workspaceData = [
-                { cat: "Gmail & Docs", id: 1, text: "Summarize this email thread into 5 key points + action items." },
-                { cat: "Gmail & Docs", id: 2, text: "Draft a professional reply in a friendly, confident tone." },
-                { cat: "Gmail & Docs", id: 3, text: "Find project emails from the past month and summarize decisions." },
-                { cat: "Gmail & Docs", id: 4, text: "Turn these meeting notes into a structured project brief." },
-                { cat: "Gmail & Docs", id: 5, text: "Rewrite this document for executives using concise language." },
-                { cat: "Gmail & Docs", id: 6, text: "Expand these bullet points into a detailed proposal." },
-                { cat: "Gmail & Docs", id: 7, text: "Proofread this document without changing the meaning." },
-                { cat: "Gmail & Docs", id: 8, text: "Create a 1-page summary of this report." },
-                { cat: "Gmail & Docs", id: 9, text: "Rewrite this document for a beginner audience." },
-                { cat: "Gmail & Docs", id: 10, text: "Compare these 2 documents and highlight the key differences." },
-                { cat: "Sheets & Slides", id: 11, text: "Create a sales dashboard from this spreadsheet." },
-                { cat: "Sheets & Slides", id: 12, text: "Explain the trends in this data in simple language." },
-                { cat: "Sheets & Slides", id: 13, text: "Generate formulas for monthly growth and profit." },
-                { cat: "Sheets & Slides", id: 14, text: "Build a 30-day content calendar." },
-                { cat: "Sheets & Slides", id: 15, text: "Create a presentation from this document." },
-                { cat: "Sheets & Slides", id: 16, text: "Suggest visuals for every slide." },
-                { cat: "Sheets & Slides", id: 17, text: "Summarize this presentation into 3 executive slides." },
-                { cat: "Sheets & Slides", id: 18, text: "Turn this spreadsheet into board-ready charts." },
-                { cat: "Drive & Meetings", id: 19, text: "Summarize every document related to this project." },
-                { cat: "Drive & Meetings", id: 20, text: "Compare these PDFs and identify major changes." },
-                { cat: "Drive & Meetings", id: 21, text: "Extract every action item from these meeting notes." },
-                { cat: "Drive & Meetings", id: 22, text: "Organize these files into logical project categories." },
-                { cat: "Drive & Meetings", id: 23, text: "Create a weekly project status report using Drive files." },
-                { cat: "Drive & Meetings", id: 24, text: "Generate a project timeline from these files." },
-                { cat: "Drive & Meetings", id: 25, text: "Review all project documents and identify missing info before launch." }
+                { cat: "Gmail & Documenti", id: 1, text: "Riassumi questo thread di email in 5 punti chiave + azioni da compiere." },
+                { cat: "Gmail & Documenti", id: 2, text: "Scrivi una risposta professionale con un tono cordiale e sicuro." },
+                { cat: "Gmail & Documenti", id: 3, text: "Trova le email del progetto dell'ultimo mese e sintetizza le decisioni prese." },
+                { cat: "Gmail & Documenti", id: 4, text: "Trasforma queste note di riunione in un brief di progetto strutturato." },
+                { cat: "Gmail & Documenti", id: 5, text: "Riscrivi questo documento per i dirigenti usando un linguaggio conciso." },
+                { cat: "Gmail & Documenti", id: 6, text: "Espandi questi punti elenco in una proposta dettagliata." },
+                { cat: "Gmail & Documenti", id: 7, text: "Correggi e rifinisci questo documento senza modificarne il significato." },
+                { cat: "Gmail & Documenti", id: 8, text: "Crea una sintesi di 1 pagina di questo report." },
+                { cat: "Gmail & Documenti", id: 9, text: "Riscrivi questo documento adattandolo a un pubblico di principianti." },
+                { cat: "Gmail & Documenti", id: 10, text: "Confronta questi 2 documenti ed evidenzia le differenze principali." },
+                { cat: "Fogli & Presentazioni", id: 11, text: "Crea una dashboard delle vendite a partire da questo foglio di calcolo." },
+                { cat: "Fogli & Presentazioni", id: 12, text: "Spiega i trend di questi dati usando un linguaggio semplice." },
+                { cat: "Fogli & Presentazioni", id: 13, text: "Genera le formule per la crescita mensile e il profitto." },
+                { cat: "Fogli & Presentazioni", id: 14, text: "Crea un calendario contenuti di 30 giorni." },
+                { cat: "Fogli & Presentazioni", id: 15, text: "Crea una presentazione a partire da questo documento." },
+                { cat: "Fogli & Presentazioni", id: 16, text: "Suggerisci elementi visivi e immagini per ogni diapositiva." },
+                { cat: "Fogli & Presentazioni", id: 17, text: "Riassumi questa presentazione in 3 diapositive per i dirigenti." },
+                { cat: "Fogli & Presentazioni", id: 18, text: "Trasforma questo foglio di calcolo in grafici pronti per la presentazione al consiglio di amministrazione." },
+                { cat: "Drive & Riunioni", id: 19, text: "Riassumi tutti i documenti relativi a questo progetto." },
+                { cat: "Drive & Riunioni", id: 20, text: "Confronta questi PDF e identifica le modifiche principali." },
+                { cat: "Drive & Riunioni", id: 21, text: "Estrai ogni azione da compiere (action item) da queste note di riunione." },
+                { cat: "Drive & Riunioni", id: 22, text: "Organizza questi file in categorie di progetto logiche." },
+                { cat: "Drive & Riunioni", id: 23, text: "Crea un report settimanale sullo stato del progetto utilizzando i file di Drive." },
+                { cat: "Drive & Riunioni", id: 24, text: "Genera una tempistica di progetto (timeline) da questi file." },
+                { cat: "Drive & Riunioni", id: 25, text: "Rivedi tutti i documenti del progetto e individua le informazioni mancanti prima del lancio." }
             ];
             const wsContainer = document.getElementById('workspace-container');
             workspaceData.forEach(p => {
@@ -503,7 +503,7 @@
                             <p class="text-xs text-slate-800 font-medium my-2 prompt-text font-mono bg-slate-50 p-2 rounded">"${p.text}"</p>
                         </div>
                         <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-semibold py-1 rounded transition flex items-center justify-center gap-1">
-                            <i data-lucide="copy" class="w-3 h-3"></i> Copia
+                            <i data-lucide="copy" class="w-3 h-3"></i> Copia Prompt
                         </button>
                     </div>
                 `;
@@ -511,13 +511,13 @@
 
             // ChatGPT 7 Writing Prompts
             const chatgptData = [
-                { id: 1, goal: "Fix Hidden Mistakes", prompt: "Review this writing like a professional editor. Find grammar mistakes, awkward phrasing, weak word choices, and unclear sentences. Rewrite only the parts that need improvement and explain why each change makes the writing stronger." },
-                { id: 2, goal: "Sound More Human", prompt: "Rewrite this writing so it sounds natural and human. Remove robotic wording, stiff language, and awkward phrases. Improve the tone, reality, and flow while keeping my original message and voice intact." },
-                { id: 3, goal: "Strengthen Every Sentence", prompt: "Improve every sentence for clarity, impact, and readability. Replace weak wording, remove unnecessary phrases, and tighten anything that feels bloated. Make each sentence stronger without changing its meaning." },
-                { id: 4, goal: "Tighten The Writing", prompt: "Edit this writing for conciseness and clarity. Remove fluff, repetition, words, and unnecessary explanations. Keep the message intact while making every sentence more direct and effective." },
-                { id: 5, goal: "Improve Writing Flow", prompt: "Rewrite this piece to improve flow, transitions, and sentence rhythm. Make the writing smoother, easier to follow, and more engaging. Ensure every idea connects naturally to the next." },
-                { id: 6, goal: "Professional Editor Review", prompt: "Act as a professional editor reviewing this draft. Find grammar issues, structural weaknesses, repetitive wording, and readability problems. Deliver an improved version and explain the most important fixes." },
-                { id: 7, goal: "Make It Publishable", prompt: "Transform this draft into a polished, publication-ready version. Improve grammar, clarity, structure, readability, and engagement. Preserve my voice while making the overall writing more professional and compelling." }
+                { id: 1, goal: "Correggi Errori Nascosti", prompt: "Rivedi questo testo come se fossi un editor professionista. Trova errori grammaticali, frasi contorte, scelte di parole deboli e periodi poco chiari. Riscrivi solo le parti che richiedono un miglioramento e spiega perché ciascuna modifica rende il testo più efficace." },
+                { id: 2, goal: "Suona Più Naturale e Umano", prompt: "Riscrivi questo testo in modo che suoni naturale e umano. Rimuovi formulazioni robotiche, linguaggio rigido e frasi artificiali. Migliora il tono, il ritmo e la fluidità mantenendo intatti il mio messaggio originale e la mia voce." },
+                { id: 3, goal: "Rafforza Ogni Frase", prompt: "Migliora ogni frase per chiarezza, impatto e leggibilità. Sostituisci i termini deboli, rimuovi le espressioni superflue e rendi conciso tutto ciò che risulta prolisso. Rendi ogni frase più forte senza alterarne il significato." },
+                { id: 4, goal: "Rendi il Testo Più Sintetico", prompt: "Modifica questo testo per aumentarne la concisione e la chiarezza. Rimuovi informazioni superflue, ripetizioni e spiegazioni non necessarie. Mantieni intatto il messaggio rendendo ogni frase più diretta ed efficace." },
+                { id: 5, goal: "Migliora la Fluidità del Testo", prompt: "Riscrivi questo pezzo per migliorare il flusso, le transizioni e il ritmo delle frasi. Rendi la scrittura più fluida, facile da seguire e coinvolgente. Assicurati che ogni idea si colleghi in modo naturale alla successiva." },
+                { id: 6, goal: "Revisione da Editor Professionista", prompt: "Agisci come un editor professionista che revisiona questa bozza. Trova problemi grammaticali, debolezze strutturali, ripetizioni di parole e criticità di leggibilità. Fornisci una versione migliorata e spiega le correzioni più importanti apportate." },
+                { id: 7, goal: "Rendi il Testo Pronto per la Pubblicazione", prompt: "Trasforma questa bozza in una versione rifinita e pronta per la pubblicazione. Migliora grammatica, chiarezza, struttura, leggibilità e coinvolgimento. Preserva la mia voce rendendo l'intero testo più professionale ed efficace." }
             ];
             const gptContainer = document.getElementById('chatgpt-container');
             chatgptData.forEach(p => {
@@ -572,12 +572,12 @@
             const claudeTips = [
                 { title: "Riduci Dimensioni File", text: "Copia e incolla testo semplice (.txt) anziché caricare PDF pesanti." },
                 { title: "Pianifica Prima", text: "Usa la chat per chiarire la struttura prima di chiedere la generazione di file complessi." },
-                { title: 'Istruzione "Ask me questions"', text: "Chiedi a Claude di farti domande prima di iniziare per selezionare opzioni senza consumare token." },
-                { title: "Modifica Messaggi", text: "Usa il tasto Edit sul tuo messaggio precedente per apportare correzioni invece di rinviarli." },
+                { title: 'Istruzione "Fammi delle domande"', text: "Chiedi a Claude di farti domande prima di iniziare per selezionare opzioni senza consumare token." },
+                { title: "Modifica Messaggi", text: "Usa il tasto Modifica sul tuo messaggio precedente per apportare correzioni invece di rinviarli." },
                 { title: "Nuova Chat Frequente", text: "Inizia una nuova chat ogni 15–20 messaggi. Le chat lunghe consumano troppi crediti rileggendo la cronologia." },
                 { title: "Scegli il Modello Adatto", text: "Haiku per compiti veloci, Sonnet per codice/tabelle, Opus per scrittura complessa." },
                 { title: "Usa i Projects", text: "Carica le linee guida una sola volta nei Projects per file e direttive ricorrenti." },
-                { title: "Disattiva Tools Inutili", text: "Disabilita la ricerca web o l'Extended Thinking se non strettamente necessari." }
+                { title: "Disattiva Strumenti Inutili", text: "Disabilita la ricerca web o l'Extended Thinking se non strettamente necessari." }
             ];
             const claudeTipsContainer = document.getElementById('claude-tips-container');
             claudeTips.forEach(tip => {
@@ -591,11 +591,11 @@
 
             // Teaching System
             const teachingData = [
-                { title: "1. Struttura Didattica e Analisi Capitolo", prompt: "You are an experienced teacher with 25 years of classroom teaching experience. Analyze this chapter deeply. Do not summarize. Instead, identify the teaching structure. Return your response using the following headings: 1. Learning Objectives | 2. Prerequisite Knowledge | 3. Main Concepts | 4. Important Formula List | 5. Concept Dependency Map | 6. Common Student Misconceptions | 7. Frequently Confused Topics | 8. Real Life Examples | 9. Visual Concepts | 10. Classroom Activities | 11. Memory Tricks | 12. Exam Important Areas | 13. HOTS Concepts | 14. One Page Chapter Overview" },
-                { title: "2. DNA dello Stile Visivo Didattico (Visual Style DNA)", prompt: "You are an Educational Visual Designer. Create a reusable Visual Style DNA for teaching [SUBJECT / TOPIC]. Return the response using: Color Palette, Typography Style, Icon Style, Illustration Style, Shape Language, Diagram Style, Infographic Style, Classroom Presentation Style, Poster Style, Mind Map Style, Visual Hierarchy, Educational Mood, Background Style, Animation Style Suggestions." },
-                { title: "3. Mappe Mentali Specializzate", prompt: "Teacher Mind Map: Flusso di insegnamento sequenziale, gerarchia concettuale, prerequisiti, formule ed errori comuni.\nStudent Mind Map: Linguaggio semplice, relazioni visive, formule separate, parole chiave ed esempi reali.\nFormula Mind Map: Raccolta completa di formule, dipendenze, casi d'uso ed errori comuni." },
-                { title: "4. Piano di Lezione da 40 Minuti (Lesson Plan)", prompt: "Using the Teacher Analysis and Teaching Blueprint below, create a complete 40-minute classroom lesson plan. Include: Learning Objectives, Classroom Opening (5 min), Teaching Flow, Teacher Talking Points, Worked Examples, Student Questions, Practice Activity, Common Misconceptions, Blackboard Sequence, Homework & Exit Ticket." },
-                { title: "5. Strategie Didattiche Differenziate", prompt: "Create three different teaching strategies for: Weak Students, Average Students, Advanced Students. For each group provide: Teaching Approach, Classroom Example, Practice Questions, Common Mistakes, Assessment Strategy." }
+                { title: "1. Struttura Didattica e Analisi Capitolo", prompt: "Sei un insegnante esperto con 25 anni di esperienza di insegnamento in classe. Analizza questo capitolo in modo approfondito. Non riassumere. Identifica invece la struttura didattica. Restituisci la tua risposta utilizzando le seguenti intestazioni:\n1. Obiettivi di apprendimento | 2. Conoscenze preliminari | 3. Concetti principali | 4. Elenco formule importanti | 5. Mappa delle dipendenze concettuali | 6. Errori e concetti errati comuni degli studenti | 7. Argomenti frequentemente confusi | 8. Esempi reali | 9. Concetti visivi | 10. Attività in classe | 11. Trucchi mnemonici | 12. Aree importanti per gli esami | 13. Concetti HOTS (Competenze di pensiero di ordine superiore) | 14. Panoramica del capitolo in una pagina" },
+                { title: "2. DNA dello Stile Visivo Didattico (Visual Style DNA)", prompt: "Sei un Educational Visual Designer. Crea un DNA dello Stile Visivo riutilizzabile per insegnare [MATERIA / ARGOMENTO]. Restituisci la risposta utilizzando: Tavolozza Colori, Stile Tipografico, Stile Icone, Stile Illustrazioni, Linguaggio delle Forme, Stile Diagrammi, Stile Infografiche, Stile Presentazione per la Classe, Stile Poster, Stile Mappe Mentali, Gerarchia Visiva, Atmosfera Educativa, Stile dello Sfondo, Suggerimenti per Animazioni." },
+                { title: "3. Mappe Mentali Specializzate", prompt: "Mappa Mentale per l'Insegnante: Flusso di insegnamento sequenziale, gerarchia concettuale, prerequisiti, formule ed errori comuni.\nMappa Mentale per lo Studente: Linguaggio semplice, relazioni visive, formule separate, parole chiave ed esempi reali.\nMappa Mentale delle Formule: Raccolta completa di formule, dipendenze, casi d'uso ed errori comuni." },
+                { title: "4. Piano di Lezione da 40 Minuti (Lesson Plan)", prompt: "Utilizzando l'analisi dell'insegnante e il modello didattico sottostante, crea un piano di lezione completo di 40 minuti per la classe. Includi: Obiettivi di apprendimento, Apertura della lezione (5 min), Flusso di insegnamento, Punti chiave per l'insegnante, Esempi svolti, Domande degli studenti, Attività pratica, Errori comuni, Sequenza alla lavagna, Compiti a casa ed Exit Ticket." },
+                { title: "5. Strategie Didattiche Differenziate", prompt: "Crea tre diverse strategie didattiche per: Studenti con difficoltà, Studenti medi, Studenti avanzati. Per ciascun gruppo fornisci: Approccio didattico, Esempio pratico in classe, Domande di esercitazione, Errori comuni, Strategia di valutazione." }
             ];
             const teachingContainer = document.getElementById('teaching-container');
             teachingData.forEach(p => {
