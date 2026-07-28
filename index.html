@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raccolta Organizzata dei Prompt e Sistemi IA V3</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        notebooklm: '#0D9488',
+                        gemini: '#2563EB',
+                        chatgpt: '#059669',
+                        claude: '#D97706',
+                        generici: '#7C3AED',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .tab-btn.active {
+            border-bottom-width: 3px;
+            font-weight: 700;
+        }
+        .tab-btn-notebooklm.active { border-color: #0D9488; color: #0D9488; background-color: #F0FDFA; }
+        .tab-btn-gemini.active { border-color: #2563EB; color: #2563EB; background-color: #EFF6FF; }
+        .tab-btn-chatgpt.active { border-color: #059669; color: #059669; background-color: #ECFDF5; }
+        .tab-btn-claude.active { border-color: #D97706; color: #D97706; background-color: #FFFBEB; }
+        .tab-btn-generici.active { border-color: #7C3AED; color: #7C3AED; background-color: #F5F3FF; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50 pointer-events-none">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-message" class="text-sm font-medium">Prompt copiato negli appunti!</span>
+    </div>
+
+    <!-- Header / Hero Section -->
+    <header class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white border-b border-slate-700/50 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-2.5 py-1 rounded-full border border-indigo-400/30">Versione V3</span>
+                        <span class="text-xs text-slate-400">Hub Strategico Prompts & Sistemi IA</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                        Raccolta Organizzata dei Prompt e Sistemi IA
+                    </h1>
+                </div>
+
+                <!-- Live Search Bar -->
+                <div class="relative w-full md:w-80">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchInput" placeholder="Cerca prompt o argomento..." 
+                        class="w-full bg-slate-800/90 text-slate-100 placeholder-slate-400 text-sm pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                </div>
+            </div>
+
+            <!-- Tab Navigation Header -->
+            <nav class="flex overflow-x-auto gap-2 mt-6 pt-2 border-t border-slate-700/50 no-scrollbar" id="tabNav">
+                <button onclick="switchTab('notebooklm')" class="tab-btn tab-btn-notebooklm active flex items-center gap-2 px-4 py-2.5 rounded-t-lg text-sm font-semibold transition text-slate-300 hover:text-white whitespace-nowrap">
+                    <i data-lucide="book-open" class="w-4 h-4"></i> NotebookLM
+                </button>
+                <button onclick="switchTab('gemini')" class="tab-btn tab-btn-gemini flex items-center gap-2 px-4 py-2.5 rounded-t-lg text-sm font-semibold transition text-slate-300 hover:text-white whitespace-nowrap">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> Gemini & Workspace
+                </button>
+                <button onclick="switchTab('chatgpt')" class="tab-btn tab-btn-chatgpt flex items-center gap-2 px-4 py-2.5 rounded-t-lg text-sm font-semibold transition text-slate-300 hover:text-white whitespace-nowrap">
+                    <i data-lucide="message-square" class="w-4 h-4"></i> ChatGPT
+                </button>
+                <button onclick="switchTab('claude')" class="tab-btn tab-btn-claude flex items-center gap-2 px-4 py-2.5 rounded-t-lg text-sm font-semibold transition text-slate-300 hover:text-white whitespace-nowrap">
+                    <i data-lucide="bot" class="w-4 h-4"></i> Anthropic Claude
+                </button>
+                <button onclick="switchTab('generici')" class="tab-btn tab-btn-generici flex items-center gap-2 px-4 py-2.5 rounded-t-lg text-sm font-semibold transition text-slate-300 hover:text-white whitespace-nowrap">
+                    <i data-lucide="graduation-cap" class="w-4 h-4"></i> Didattica & Generici
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- ==================== TAB 1: NOTEBOOKLM ==================== -->
+        <div id="tab-notebooklm" class="tab-content">
+            <div class="mb-8 bg-teal-50 border border-teal-200 rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-teal-900 flex items-center gap-2 mb-2">
+                    <i data-lucide="book-open" class="w-6 h-6 text-teal-600"></i> NotebookLM - Configurazione & Workflow
+                </h2>
+                <p class="text-teal-800 text-sm">Strategia completa di configurazione, ottimizzazione e trasformazione delle fonti in materiali di apprendimento avanzati.</p>
+            </div>
+
+            <!-- Workflow Steps -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 prompt-card">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-bold uppercase text-teal-600 mb-1">Passo 1</div>
+                    <h3 class="font-bold text-slate-900 mb-2">Configurazione Iniziale</h3>
+                    <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
+                        <li>Crea un nuovo notebook come spazio centrale.</li>
+                        <li>Estensione Chrome <b>YouTube to NotebookLM</b> per trascrizioni video.</li>
+                        <li>Estensione <b>NotebookLM Web Importer</b> per salvare articoli e paper.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-bold uppercase text-teal-600 mb-1">Passo 2</div>
+                    <h3 class="font-bold text-slate-900 mb-2">Ottimizzazione Stile</h3>
+                    <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
+                        <li>Imposta il <b>Response Style</b> su <i>Learning Guide</i>.</li>
+                        <li>Imposta la <b>Response Length</b> su <i>Longer</i> per analisi approfondite.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-bold uppercase text-teal-600 mb-1">Passo 4</div>
+                    <h3 class="font-bold text-slate-900 mb-2">Strategia "PAGINA BIANCA" (Clean Slate)</h3>
+                    <p class="text-xs text-slate-600">Elimina le fonti originali (video, articoli) dalla barra laterale e aggiungi le note salvate come uniche fonti del notebook per la massima precisione.</p>
+                </div>
+            </div>
+
+            <!-- Il Sistema a 3 Prompt -->
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="layers" class="w-5 h-5 text-teal-600"></i> Il Sistema a 3 Prompt per l'Apprendimento
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between prompt-card">
+                    <div>
+                        <span class="inline-block bg-teal-100 text-teal-800 text-xs font-semibold px-2 py-0.5 rounded mb-2">1. La Panoramica</span>
+                        <p class="text-sm text-slate-700 italic bg-slate-50 p-3 rounded-lg border border-slate-100 mb-4 prompt-text">"Forniscimi una panoramica generale dell'intero documento, suddivisa nei temi e concetti principali, come se lo stessi presentando a una persona che lo vede per la prima volta."</p>
+                    </div>
+                    <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 text-xs font-semibold py-2 rounded-lg transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt
+                    </button>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between prompt-card">
+                    <div>
+                        <span class="inline-block bg-teal-100 text-teal-800 text-xs font-semibold px-2 py-0.5 rounded mb-2">2. Il Tutor</span>
+                        <p class="text-sm text-slate-700 italic bg-slate-50 p-3 rounded-lg border border-slate-100 mb-4 prompt-text">"Insegnami il contenuto di questo documento passo dopo passo, partendo dalle basi e aumentando gradualmente il livello di difficoltà. Considera che sto studiando questo argomento per la prima volta."</p>
+                    </div>
+                    <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 text-xs font-semibold py-2 rounded-lg transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt
+                    </button>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between prompt-card">
+                    <div>
+                        <span class="inline-block bg-teal-100 text-teal-800 text-xs font-semibold px-2 py-0.5 rounded mb-2">3. La Scomposizione</span>
+                        <p class="text-sm text-slate-700 italic bg-slate-50 p-3 rounded-lg border border-slate-100 mb-4 prompt-text">"Trasforma ogni sezione o capitolo di questo documento in una breve lezione con una spiegazione chiara, esempi e un rapido riepilogo finale."</p>
+                    </div>
+                    <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 text-xs font-semibold py-2 rounded-lg transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt
+                    </button>
+                </div>
+            </div>
+
+            <!-- Analisi Video YouTube -->
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="youtube" class="w-5 h-5 text-red-600"></i> Analisi e Decostruzione Video YouTube
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+                <!-- Items 1 to 10 for YouTube -->
+                <script>
+                    const ytPrompts = [
+                        { t: "1. Decostruzione Profonda", it: "Analizza attentamente la fonte video di YouTube fornita e decostruisci l'intera struttura dell'insegnamento. Identifica il problema centrale affrontato nel video, le idee principali introdotte e il modo in cui l'autore sviluppa logicamente la spiegazione per tutto il video. Suddividilo in sezioni e sintetizza l'obiettivo di ciascuna sezione.", en: "Carefully analyze the provided YouTube video source and deconstruct the full structure of the teaching. Identify the central problem the video is addressing, the major ideas introduced, and how the creator logically builds the explanation throughout the video." },
+                        { t: "2. Albero delle Competenze & Dipendenze", it: "Sulla base delle informazioni contenute in questo video, estrai l'insieme completo delle competenze necessarie per padroneggiare l'argomento insegnato. Suddividile in micro-competenze e organizzale in un albero delle competenze gerarchico.", en: "From the information in this video source, extract the complete set of skills required to master the topic being taught. Break these into micro-skills and organize them into a hierarchical skill tree." },
+                        { t: "3. Principio 80/20 (Intuizioni ad Alto Impatto)", it: "Analizza il video e individua il ristretto numero di idee, strategie o tecniche che generano la maggior parte dei risultati quando applicate nella pratica.", en: "Analyze the video and identify the small number of ideas, strategies, or techniques that likely produce the majority of results when applied in practice." },
+                        { t: "4. Guida Operativa di Esecuzione", it: "Converti i consigli pratici presenti in questo video in una guida operativa dettagliata che chiunque possa seguire dall'inizio alla fine.", en: "Convert the practical advice in this video into a detailed execution playbook that someone could follow from start to finish." },
+                        { t: "5. Modelli Mentali & Schemi degli Esperti", it: "Identifica i modelli mentali sottostanti, i framework e gli schemi di ragionamento che il creator utilizza nel video durante la spiegazione dell'argomento.", en: "Identify the underlying mental models, frameworks, and reasoning patterns that the creator uses in this video when explaining the topic." },
+                        { t: "6. Scenari Applicativi Reali", it: "Crea diversi scenari realistici in cui le conoscenze di questo video verrebbero applicate nella pratica.", en: "Create several realistic scenarios where the knowledge from this video would be applied in practice." },
+                        { t: "7. Trappole per Principianti", it: "Analizza il video e identifica gli errori che i principianti rischiano maggiormente di commettere quando cercano di applicare le idee presentate.", en: "Analyze the video and identify the mistakes beginners are most likely to make when trying to implement the ideas presented." },
+                        { t: "8. Percorso di Padronanza Strutturato", it: "Progetta una mappa del percorso di padronanza strutturato basandoti sul contenuto del video.", en: "Design a structured mastery roadmap based on the content of this video." },
+                        { t: "9. Scheda di Sintesi (Cheat Sheet)", it: "Condensa tutte le informazioni chiave di questo video in una scheda di sintesi (cheat sheet) ad alta densità utilizzabile per una rapida revisione ed esecuzione.", en: "Condense all key information from this video into a high-density cheat sheet that can be used for quick review and execution." },
+                        { t: "10. Autovalutazione e Validazione", it: "Crea un sistema strutturato di autovalutazione basato su questo video che permetta di verificare se si è davvero padroneggiato il contenuto.", en: "Create a structured self-testing system based on this video that allows someone to verify whether they have truly mastered the content." }
+                    ];
+                </script>
+                <div id="yt-container" class="contents"></div>
+            </div>
+
+            <!-- Ricerca Accademica -->
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="file-text" class="w-5 h-5 text-teal-600"></i> Ricerca Accademica, Letteratura & Grant
+            </h3>
+            <div id="academic-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
+
+            <!-- Modalità Analitiche Avanzate -->
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-teal-600"></i> Modalità Analitiche Avanzate per NotebookLM
+            </h3>
+            <div id="advanced-container" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- ==================== TAB 2: GEMINI & WORKSPACE ==================== -->
+        <div id="tab-gemini" class="tab-content hidden">
+            <div class="mb-8 bg-blue-50 border border-blue-200 rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-blue-900 flex items-center gap-2 mb-2">
+                    <i data-lucide="sparkles" class="w-6 h-6 text-blue-600"></i> Gemini & Google Workspace
+                </h2>
+                <p class="text-blue-800 text-sm">Sistemi di apprendimento personalizzato e 25 prompt ad alta efficienza per l'ecosistema Google.</p>
+            </div>
+
+            <!-- Sistema Apprendimento Feynman / Primi Principi -->
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="brain" class="w-5 h-5 text-blue-600"></i> Sistema di Apprendimento Personalizzato (7 Prompt Fondamentali)
+            </h3>
+            <div id="feynman-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12"></div>
+
+            <!-- 25 Workspace Prompts -->
+            <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                <i data-lucide="layout-grid" class="w-5 h-5 text-blue-600"></i> 25 Gemini Prompts for Google Workspace
+            </h3>
+            <p class="text-xs text-slate-500 mb-4">Formula base: <b>Role + Task + Context + Output Format</b></p>
+            <div id="workspace-container" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- ==================== TAB 3: CHATGPT ==================== -->
+        <div id="tab-chatgpt" class="tab-content hidden">
+            <div class="mb-8 bg-emerald-50 border border-emerald-200 rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-emerald-900 flex items-center gap-2 mb-2">
+                    <i data-lucide="message-square" class="w-6 h-6 text-emerald-600"></i> ChatGPT - Scrittura e Revisione Avanzata
+                </h2>
+                <p class="text-emerald-800 text-sm">7 Prompt strutturati per rendere la scrittura più forte, chiara e naturale superando il semplice "controlla la grammatica".</p>
+            </div>
+
+            <div id="chatgpt-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
+
+        <!-- ==================== TAB 4: CLAUDE ==================== -->
+        <div id="tab-claude" class="tab-content hidden">
+            <div class="mb-8 bg-amber-50 border border-amber-200 rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-amber-900 flex items-center gap-2 mb-2">
+                    <i data-lucide="bot" class="w-6 h-6 text-amber-600"></i> Anthropic Claude - Lingue & Ottimizzazione
+                </h2>
+                <p class="text-amber-800 text-sm">Framework completo per l'apprendimento delle lingue e strategie per gestire al meglio i limiti di token.</p>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="languages" class="w-5 h-5 text-amber-600"></i> Framework per l'Apprendimento delle Lingue (8 Moduli)
+            </h3>
+            <div id="claude-lang-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
+
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="zap" class="w-5 h-5 text-amber-600"></i> Guida Pratica all'Ottimizzazione dei Limiti di Uso di Claude
+            </h3>
+            <div id="claude-tips-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- ==================== TAB 5: GENERICI & DIDATTICA ==================== -->
+        <div id="tab-generici" class="tab-content hidden">
+            <div class="mb-8 bg-purple-50 border border-purple-200 rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-purple-900 flex items-center gap-2 mb-2">
+                    <i data-lucide="graduation-cap" class="w-6 h-6 text-purple-600"></i> AI Teaching System & Padronanza Competenze
+                </h2>
+                <p class="text-purple-800 text-sm">Sistemi di progettazione didattica, analisi capitoli e roadmap universali per la padronanza in 30 giorni.</p>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="book-open-check" class="w-5 h-5 text-purple-600"></i> AI Teaching System (Progettazione Lezioni e Didattica)
+            </h3>
+            <div id="teaching-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"></div>
+
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="award" class="w-5 h-5 text-purple-600"></i> 7 Prompt Universali per la Padronanza delle Competenze
+            </h3>
+            <div id="universal-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 mt-12 text-center text-xs">
+        <div class="max-w-7xl mx-auto px-4">
+            Raccolta Organizzata dei Prompt e Sistemi IA V3 &bull; Strumento ottimizzato per NotebookLM, Gemini, ChatGPT e Claude.
+        </div>
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Tab Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.querySelector(`.tab-btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+
+        // Copy Functionality
+        function copyPrompt(buttonElement, textToCopy = null) {
+            let text = textToCopy;
+            if (!text) {
+                const card = buttonElement.closest('.prompt-card');
+                const promptEl = card.querySelector('.prompt-text');
+                text = promptEl ? promptEl.innerText.replace(/^"|"$/g, '').trim() : '';
+            }
+
+            if (!text) return;
+
+            // Fallback for document.execCommand inside sandboxed iFrames
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast("Prompt copiato negli appunti!");
+            } catch (err) {
+                console.error('Errore durante la copia: ', err);
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // Live Search Filter
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.prompt-card');
+            
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Dynamic Population of Data
+        document.addEventListener('DOMContentLoaded', () => {
+            // Render YT Prompts
+            const ytContainer = document.getElementById('yt-container');
+            ytPrompts.forEach(p => {
+                ytContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2">${p.t}</h4>
+                            <div class="mb-3">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Italiano</span>
+                                <p class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded border border-slate-100 italic prompt-text">"${p.it}"</p>
+                            </div>
+                            <div class="mb-4">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Inglese</span>
+                                <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded border border-slate-100 italic">"${p.en}"</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="copyPrompt(this)" class="flex-1 bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copia IT
+                            </button>
+                            <button onclick="copyPrompt(null, '${p.en.replace(/'/g, "\\'")}')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copia EN
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Academic Prompts
+            const academicData = [
+                { t: "1. Mappare il Panorama della Ricerca", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO]. Crea un quadro d'insieme strutturato elencando ogni fonte per autore, anno di pubblicazione, titolo, tesi centrale, temi principali, punti di consenso e prospettive contrapposte.", en: "Analyze all uploaded sources related to [TOPIC]. Create a structured overview listing each source by author, publication year, title, and its central thesis. Organize sources by author, year, title, core thesis, themes, consensus, and competing viewpoints." },
+                { t: "2. Mappare le Tesi Contestate", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO] e identifica le principali tesi contestate nella letteratura. Confronta dove i ricercatori concordano o discordano, sintetizza ciascuna posizione, valuta le prove emersi ed evidenzia i dibattiti irrisolti.", en: "Analyze all uploaded sources related to [TOPIC] and identify the major contested claims across the literature. Compare where researchers agree or disagree, summarize each side, evaluate the evidence, and surface unresolved debates." },
+                { t: "3. Tracciare l'Evoluzione delle Idee", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO] e individua i concetti più influenti. Segui lo sviluppo dei concetti dalle prime pubblicazioni fino ai lavori più recenti ed evidenzia i punti di svolta chiave.", en: "Analyze all uploaded sources related to [TOPIC] and identify influential concepts. Follow influential concepts from early publications to recent work and highlight the key turning points." },
+                { t: "4. Identificare Research Gap ad Alto Impatto", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO] e individua i principali interrogativi irrisolti. Individua le domande aperte più importanti, spiega perché rimangono tali e classifica il loro impatto potenziale.", en: "Analyze all uploaded sources related to [TOPIC] and identify the most important unanswered questions, explain why they remain open, and rank their impact." },
+                { t: "5. Costruire una Strategia per Conferenze", it: "Utilizzando il programma del convegno e i miei interessi di ricerca in [SETTORE], dai la priorità alle sessioni più rilevanti, individua le persone chiave da incontrare e crea opportunità di networking mirate.", en: "Build a Conference Strategy: Prioritize the most relevant sessions, identify key people to meet, and create smarter networking opportunities." },
+                { t: "6. Trasformare i Feedback in Piano di Revisione", it: "Analizza tutti i feedback di revisori, supervisori e coautori. Consolida i commenti in temi e problemi ricorrenti e crea un piano di revisione prioritizzato per il manoscritto.", en: "Turn Feedback Into a Revision Plan: Consolidate reviewer, supervisor, and co-author feedback into themes, recurring issues, and priority revisions." },
+                { t: "7. Rafforzare la Sezione Lead Investigator", it: "Allinea il mio CV, l'elenco delle pubblicazioni e il profilo di ricerca con i criteri di valutazione del bando di finanziamento (grant) e le aspettative dei revisori.", en: "Strengthen the Lead Investigator Section: Align your CV, publications, and research profile with the grant's evaluation criteria and reviewer expectations." },
+                { t: "8. Sintetizzare la Letteratura", it: "Utilizzando esclusivamente le fonti caricate relative a [ARGOMENTO], produci una sintesi completa della letteratura anziché singoli riassunti dei paper.", en: "Using only the uploaded sources related to [TOPIC], produce a comprehensive literature synthesis rather than individual paper summaries." },
+                { t: "9. Spiegare il Settore in Parole Semplici", it: "Utilizzando solo le fonti caricate relative a [ARGOMENTO], spiega lo stato attuale della ricerca in un linguaggio chiaro e semplice per un pubblico di non specialisti.", en: "Using only the uploaded sources related to [TOPIC], explain the current state of the research in clear, plain English for a non-specialist audience." }
+            ];
+            const academicContainer = document.getElementById('academic-container');
+            academicData.forEach(p => {
+                academicContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2">${p.t}</h4>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded border border-slate-100 italic mb-3 prompt-text">"${p.it}"</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="copyPrompt(this)" class="flex-1 bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copia IT
+                            </button>
+                            <button onclick="copyPrompt(null, '${p.en.replace(/'/g, "\\'")}')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copia EN
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Advanced Analytical Modes
+            const advData = [
+                { title: "1. Estrattore Significato Profondo", prompt: "Analizza ogni fonte caricata e porta alla luce il significato fondamentale alla base del contenuto, non solo le informazioni che contiene. Genera 5 domande ad alto valore che valutino la comprensione profonda." },
+                { title: "2. Costruttore Pensiero Strutturato", prompt: "Esamina tutti i documenti caricati e identifica la struttura sottostante che connette l'intero materiale. Genera 5 domande ad alto valore che forniscano una comprensione completa dello scopo del documento." },
+                { title: "3. Motore Scoperta Intuizioni", prompt: "Analizza tutte le fonti caricate e porta alla luce le intuizioni di maggior valore che contano davvero. Identifica le idee sorprendenti o controintuitive." },
+                { title: "4. Approfondimento Guidato", prompt: "Sto facendo una ricerca su [INSERISCI ARGOMENTO]. Esamina ogni fonte ed estrai solo le intuizioni più rilevanti legate a questo obiettivo." },
+                { title: "5. Generatore Quiz Interattivi", prompt: "Crea un quiz interattivo basato su [INSERISCI ARGOMENTO], presentato come una conversazione naturale tra due persone. Includi 10 domande con difficoltà crescente." },
+                { title: "6. Creatore Podcast Multilingua", prompt: "Crea un episodio di podcast completo o una discussione approfondita basata su tutti i materiali caricati, scritta interamente in [INSERISCI LINGUA]." },
+                { title: "7. Lente da Product Manager", prompt: "Agisci come un Senior Product Manager che esamina la documentazione interna per produrre un memorandum esecutivo sintetico." },
+                { title: "8. Modalità Analisi Scientifica", prompt: "Agisci come un Assistente di Ricerca per uno scienziato senior. Valuta criticamente il materiale caricato dando priorità alle prove." },
+                { title: "9. Traduttore Scuole Superiori", prompt: "Riscrivi il contenuto caricato affinché un ragazzo di 12 anni possa afferrarlo appieno. Includi TL;DR, Analogia, Lessico, Vero/Falso e Spiegazione Semplice." }
+            ];
+            const advContainer = document.getElementById('advanced-container');
+            advData.forEach(p => {
+                advContainer.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-xs mb-2 text-teal-700">${p.title}</h4>
+                            <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded border border-slate-100 italic mb-3 prompt-text">"${p.prompt}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Copia Prompt
+                        </button>
+                    </div>
+                `;
+            });
+
+            // Feynman / Gemini Personalized
+            const feynmanData = [
+                { title: "1. Metodo Feynman", prompt: "Insegnami [ARGOMENTO] come se fossi un principiante assoluto, usando un linguaggio semplice e quotidiano. Scomponilo in passaggi chiari e facili da seguire con esempi pratici e analogie." },
+                { title: "2. Scomposizione Primi Principi", prompt: "Agisci come un esperto e docente di livello mondiale. Scomponi [ARGOMENTO] nei suoi elementi costitutivi più fondamentali usando il ragionamento basato sui primi principi." },
+                { title: "3. Coach Richiamo Attivo", prompt: "Dopo avermi insegnato [ARGOMENTO], assumi il ruolo di coach per il richiamo attivo (active recall). Mettimi alla prova con domande progressivamente più impegnative." },
+                { title: "4. Ripetizione Dilazionata", prompt: "Agisci come un esperto di apprendimento e memoria. Crea un piano personalizzato di ripetizione dilazionata (spaced repetition) per padroneggiare [ARGOMENTO]." },
+                { title: "5. Riassunto 80/20", prompt: "Agisci come un educatore di livello mondiale. Trasforma [ARGOMENTO] in un sistema di apprendimento sintetico ad alto impatto (20% dei concetti per l'80% della comprensione)." },
+                { title: "6. Mentore Applicazione Reale", prompt: "Agisci come un mentore esperto. Dopo avermi insegnato [ARGOMENTO], mostrami esattamente come si applica in situazioni reali attraverso casi di studio pratici." },
+                { title: "7. Roadmap Personalizzata", prompt: "Agisci come il mio coach personale per l'apprendimento. Crea una roadmap passo dopo passo per padroneggiare [ARGOMENTO] da principiante a esperto." }
+            ];
+            const feynmanContainer = document.getElementById('feynman-container');
+            feynmanData.forEach(p => {
+                feynmanContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2 text-blue-700">${p.title}</h4>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded border border-slate-100 italic mb-4 prompt-text">"${p.prompt}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-semibold py-2 rounded transition flex items-center justify-center gap-1">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt
+                        </button>
+                    </div>
+                `;
+            });
+
+            // 25 Workspace Prompts
+            const workspaceData = [
+                { cat: "Gmail & Docs", id: 1, text: "Summarize this email thread into 5 key points + action items." },
+                { cat: "Gmail & Docs", id: 2, text: "Draft a professional reply in a friendly, confident tone." },
+                { cat: "Gmail & Docs", id: 3, text: "Find project emails from the past month and summarize decisions." },
+                { cat: "Gmail & Docs", id: 4, text: "Turn these meeting notes into a structured project brief." },
+                { cat: "Gmail & Docs", id: 5, text: "Rewrite this document for executives using concise language." },
+                { cat: "Gmail & Docs", id: 6, text: "Expand these bullet points into a detailed proposal." },
+                { cat: "Gmail & Docs", id: 7, text: "Proofread this document without changing the meaning." },
+                { cat: "Gmail & Docs", id: 8, text: "Create a 1-page summary of this report." },
+                { cat: "Gmail & Docs", id: 9, text: "Rewrite this document for a beginner audience." },
+                { cat: "Gmail & Docs", id: 10, text: "Compare these 2 documents and highlight the key differences." },
+                { cat: "Sheets & Slides", id: 11, text: "Create a sales dashboard from this spreadsheet." },
+                { cat: "Sheets & Slides", id: 12, text: "Explain the trends in this data in simple language." },
+                { cat: "Sheets & Slides", id: 13, text: "Generate formulas for monthly growth and profit." },
+                { cat: "Sheets & Slides", id: 14, text: "Build a 30-day content calendar." },
+                { cat: "Sheets & Slides", id: 15, text: "Create a presentation from this document." },
+                { cat: "Sheets & Slides", id: 16, text: "Suggest visuals for every slide." },
+                { cat: "Sheets & Slides", id: 17, text: "Summarize this presentation into 3 executive slides." },
+                { cat: "Sheets & Slides", id: 18, text: "Turn this spreadsheet into board-ready charts." },
+                { cat: "Drive & Meetings", id: 19, text: "Summarize every document related to this project." },
+                { cat: "Drive & Meetings", id: 20, text: "Compare these PDFs and identify major changes." },
+                { cat: "Drive & Meetings", id: 21, text: "Extract every action item from these meeting notes." },
+                { cat: "Drive & Meetings", id: 22, text: "Organize these files into logical project categories." },
+                { cat: "Drive & Meetings", id: 23, text: "Create a weekly project status report using Drive files." },
+                { cat: "Drive & Meetings", id: 24, text: "Generate a project timeline from these files." },
+                { cat: "Drive & Meetings", id: 25, text: "Review all project documents and identify missing info before launch." }
+            ];
+            const wsContainer = document.getElementById('workspace-container');
+            workspaceData.forEach(p => {
+                wsContainer.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">${p.cat}</span>
+                                <span class="text-[10px] font-bold text-slate-400">#${p.id}</span>
+                            </div>
+                            <p class="text-xs text-slate-800 font-medium my-2 prompt-text font-mono bg-slate-50 p-2 rounded">"${p.text}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-semibold py-1 rounded transition flex items-center justify-center gap-1">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Copia
+                        </button>
+                    </div>
+                `;
+            });
+
+            // ChatGPT 7 Writing Prompts
+            const chatgptData = [
+                { id: 1, goal: "Fix Hidden Mistakes", prompt: "Review this writing like a professional editor. Find grammar mistakes, awkward phrasing, weak word choices, and unclear sentences. Rewrite only the parts that need improvement and explain why each change makes the writing stronger." },
+                { id: 2, goal: "Sound More Human", prompt: "Rewrite this writing so it sounds natural and human. Remove robotic wording, stiff language, and awkward phrases. Improve the tone, reality, and flow while keeping my original message and voice intact." },
+                { id: 3, goal: "Strengthen Every Sentence", prompt: "Improve every sentence for clarity, impact, and readability. Replace weak wording, remove unnecessary phrases, and tighten anything that feels bloated. Make each sentence stronger without changing its meaning." },
+                { id: 4, goal: "Tighten The Writing", prompt: "Edit this writing for conciseness and clarity. Remove fluff, repetition, words, and unnecessary explanations. Keep the message intact while making every sentence more direct and effective." },
+                { id: 5, goal: "Improve Writing Flow", prompt: "Rewrite this piece to improve flow, transitions, and sentence rhythm. Make the writing smoother, easier to follow, and more engaging. Ensure every idea connects naturally to the next." },
+                { id: 6, goal: "Professional Editor Review", prompt: "Act as a professional editor reviewing this draft. Find grammar issues, structural weaknesses, repetitive wording, and readability problems. Deliver an improved version and explain the most important fixes." },
+                { id: 7, goal: "Make It Publishable", prompt: "Transform this draft into a polished, publication-ready version. Improve grammar, clarity, structure, readability, and engagement. Preserve my voice while making the overall writing more professional and compelling." }
+            ];
+            const gptContainer = document.getElementById('chatgpt-container');
+            chatgptData.forEach(p => {
+                gptContainer.innerHTML += `
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full">#${p.id}</span>
+                                <h4 class="font-bold text-slate-900 text-sm">${p.goal}</h4>
+                            </div>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono mb-4 prompt-text leading-relaxed">"${p.prompt}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 text-xs font-semibold py-2 rounded transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt Completo
+                        </button>
+                    </div>
+                `;
+            });
+
+            // Claude Languages
+            const claudeLangData = [
+                { t: "1. Roadmap per la Fluidità", it: "Agisci come tutor linguistico e progettista di corsi. Costruisci per me un piano di sei mesi per riuscire a sostenere vere conversazioni nella mia lingua di destinazione.", en: "Act as a language tutor and curriculum designer. Build me a six-month plan to hold real conversations in my target language." },
+                { t: "2. Vocabolario Fondamentale", it: "Agisci come un linguista. Prepara per me le prime 300 parole che sbloccano la maggior parte delle conversazioni quotidiane nella mia lingua di destinazione.", en: "Act as a linguist. Build me the first 300 words that unlock the most everyday conversation in my target language." },
+                { t: "3. Simulatore di Conversazione", it: "Agisci come un madrelingua paziente. Sostieni con me una semplice conversazione al mio livello su una situazione reale.", en: "Act as a patient native speaker. Hold a simple conversation with me at my level about a real situation." },
+                { t: "4. Semplificatore di Grammatica", it: "Agisci come un coach di grammatica che odia il gergo tecnico. Spiegami la regola grammaticale con cui sto faticando usando un linguaggio semplice.", en: "Act as a grammar coach who hates jargon. Explain the one grammar pattern I'm struggling with using plain language." },
+                { t: "5. Correttore di Pronuncia", it: "Agisci come un coach di pronuncia. Per i suoni della mia lingua di destinazione che risultano più difficili, spiegami come posizionare la bocca.", en: "Act as a pronunciation coach. For the sounds in my target language that English speakers find hardest, explain how to shape my mouth." },
+                { t: "6. Creatore di Immersione", it: "Agisci come un coach di immersione linguistica. Progetta un piano per circondare la mia vita quotidiana con la mia lingua di destinazione.", en: "Act as an immersion coach. Design a plan to surround my daily life with my target language without moving countries." },
+                { t: "7. Esercitazione Shadowing", it: "Agisci come un coach di fluidità usando il metodo dello shadowing. Dammi un breve brano al mio livello, scomponilo in frasi e guidami nel ripetere ciascuna frase.", en: "Act as a fluency coach using the shadowing method. Give me a short passage at my level, break it into phrases, and coach me to repeat each one." },
+                { t: "8. Ripasso Settimanale", it: "Agisci come il mio coach linguistico per gestire un ripasso del venerdì. Chiedimi di usare la lingua attraverso cinque spunti d'uso quotidiano.", en: "Act as my language coach running a Friday review. Ask me to use the language across five everyday prompts." }
+            ];
+            const claudeLangContainer = document.getElementById('claude-lang-container');
+            claudeLangData.forEach(p => {
+                claudeLangContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2">${p.t}</h4>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded border border-slate-100 italic mb-3 prompt-text">"${p.it}"</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="copyPrompt(this)" class="flex-1 bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copia IT
+                            </button>
+                            <button onclick="copyPrompt(null, '${p.en.replace(/'/g, "\\'")}')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copia EN
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Claude Tips
+            const claudeTips = [
+                { title: "Riduci Dimensioni File", text: "Copia e incolla testo semplice (.txt) anziché caricare PDF pesanti." },
+                { title: "Pianifica Prima", text: "Usa la chat per chiarire la struttura prima di chiedere la generazione di file complessi." },
+                { title: 'Istruzione "Ask me questions"', text: "Chiedi a Claude di farti domande prima di iniziare per selezionare opzioni senza consumare token." },
+                { title: "Modifica Messaggi", text: "Usa il tasto Edit sul tuo messaggio precedente per apportare correzioni invece di rinviarli." },
+                { title: "Nuova Chat Frequente", text: "Inizia una nuova chat ogni 15–20 messaggi. Le chat lunghe consumano troppi crediti rileggendo la cronologia." },
+                { title: "Scegli il Modello Adatto", text: "Haiku per compiti veloci, Sonnet per codice/tabelle, Opus per scrittura complessa." },
+                { title: "Usa i Projects", text: "Carica le linee guida una sola volta nei Projects per file e direttive ricorrenti." },
+                { title: "Disattiva Tools Inutili", text: "Disabilita la ricerca web o l'Extended Thinking se non strettamente necessari." }
+            ];
+            const claudeTipsContainer = document.getElementById('claude-tips-container');
+            claudeTips.forEach(tip => {
+                claudeTipsContainer.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-amber-200/60 shadow-sm prompt-card">
+                        <h4 class="font-bold text-amber-900 text-xs mb-1">${tip.title}</h4>
+                        <p class="text-xs text-slate-600">${tip.text}</p>
+                    </div>
+                `;
+            });
+
+            // Teaching System
+            const teachingData = [
+                { title: "1. Struttura Didattica e Analisi Capitolo", prompt: "You are an experienced teacher with 25 years of classroom teaching experience. Analyze this chapter deeply. Do not summarize. Instead, identify the teaching structure. Return your response using the following headings: 1. Learning Objectives | 2. Prerequisite Knowledge | 3. Main Concepts | 4. Important Formula List | 5. Concept Dependency Map | 6. Common Student Misconceptions | 7. Frequently Confused Topics | 8. Real Life Examples | 9. Visual Concepts | 10. Classroom Activities | 11. Memory Tricks | 12. Exam Important Areas | 13. HOTS Concepts | 14. One Page Chapter Overview" },
+                { title: "2. DNA dello Stile Visivo Didattico (Visual Style DNA)", prompt: "You are an Educational Visual Designer. Create a reusable Visual Style DNA for teaching [SUBJECT / TOPIC]. Return the response using: Color Palette, Typography Style, Icon Style, Illustration Style, Shape Language, Diagram Style, Infographic Style, Classroom Presentation Style, Poster Style, Mind Map Style, Visual Hierarchy, Educational Mood, Background Style, Animation Style Suggestions." },
+                { title: "3. Mappe Mentali Specializzate", prompt: "Teacher Mind Map: Flusso di insegnamento sequenziale, gerarchia concettuale, prerequisiti, formule ed errori comuni.\nStudent Mind Map: Linguaggio semplice, relazioni visive, formule separate, parole chiave ed esempi reali.\nFormula Mind Map: Raccolta completa di formule, dipendenze, casi d'uso ed errori comuni." },
+                { title: "4. Piano di Lezione da 40 Minuti (Lesson Plan)", prompt: "Using the Teacher Analysis and Teaching Blueprint below, create a complete 40-minute classroom lesson plan. Include: Learning Objectives, Classroom Opening (5 min), Teaching Flow, Teacher Talking Points, Worked Examples, Student Questions, Practice Activity, Common Misconceptions, Blackboard Sequence, Homework & Exit Ticket." },
+                { title: "5. Strategie Didattiche Differenziate", prompt: "Create three different teaching strategies for: Weak Students, Average Students, Advanced Students. For each group provide: Teaching Approach, Classroom Example, Practice Questions, Common Mistakes, Assessment Strategy." }
+            ];
+            const teachingContainer = document.getElementById('teaching-container');
+            teachingData.forEach(p => {
+                teachingContainer.innerHTML += `
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-purple-900 text-sm mb-2">${p.title}</h4>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono mb-4 prompt-text leading-relaxed whitespace-pre-line">"${p.prompt}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-700 text-xs font-semibold py-2 rounded transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt
+                        </button>
+                    </div>
+                `;
+            });
+
+            // Universal Prompts
+            const universalData = [
+                { id: 1, title: "Traccia i miei progressi", it: "Agisci come il mio coach personale per l'apprendimento durante tutto il mio percorso di 30 giorni.", en: "Act as my personal learning coach throughout my 30-day journey." },
+                { id: 2, title: "Tutor Personale Esperto", it: "Agisci come un tutor esperto e insegnami come se fossi il tuo unico studente.", en: "Act as an expert tutor and teach me as if I were your only student." },
+                { id: 3, title: "Pratica Deliberata Giornaliera", it: "Progetta esercizi giornalieri focalizzati su una sotto-competenza alla volta.", en: "Design daily exercises targeting one subskill at a time." },
+                { id: 4, title: "Progetti Reali Applicati", it: "Progetta una sequenza di progetti del mondo reale.", en: "Design a sequence of real-world projects." },
+                { id: 5, title: "Richiamo Attivo (Active Recall)", it: "Valuta le mie conoscenze usando domande di richiamo attivo.", en: "Assess my knowledge using active recall questions." },
+                { id: 6, title: "Piano Miglioramento Punti Deboli", it: "Analizza la mia prestazione, ordina le aree deboli e crea un piano personalizzato.", en: "Analyze my performance, rank weak areas, and create a personalized plan." },
+                { id: 7, title: "Roadmap Mastery 30 Giorni", it: "Crea una roadmap personalizzata a 30 giorni con lezioni giornaliere e pratica.", en: "Build a personalized 30-day roadmap with daily lessons and practice." }
+            ];
+            const universalContainer = document.getElementById('universal-container');
+            universalData.forEach(p => {
+                universalContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-0.5 rounded">#${p.id}</span>
+                                <h4 class="font-bold text-slate-900 text-xs">${p.title}</h4>
+                            </div>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded border border-slate-100 italic mb-3 prompt-text">"${p.it}"</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="copyPrompt(this)" class="flex-1 bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copia IT
+                            </button>
+                            <button onclick="copyPrompt(null, '${p.en.replace(/'/g, "\\'")}')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copia EN
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Initialize Lucide Icons
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
