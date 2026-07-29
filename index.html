@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raccolta Organizzata dei Prompt e Sistemi IA V3</title>
+    <title>Raccolta Organizzata dei Prompt e Sistemi IA V4</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -13,20 +13,23 @@
             theme: {
                 extend: {
                     colors: {
+                        mendel: {50:'#e8f5e9',100:'#c8e6c9',200:'#a5d6a7',300:'#81c784',400:'#4caf50',500:'#43a047',600:'#388e3c',700:'#2e7d32',800:'#1b5e20',900:'#123c16'},
                         notebooklm: '#0D9488',
                         gemini: '#2563EB',
                         chatgpt: '#059669',
                         claude: '#D97706',
                         generici: '#7C3AED',
-                    }
+                        edugems: '#E11D48',
+                    },
+                    fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
         }
         .tab-btn.active {
             border-bottom-width: 3px;
@@ -37,6 +40,22 @@
         .tab-btn-chatgpt.active { border-color: #059669; color: #059669; background-color: #ECFDF5; }
         .tab-btn-claude.active { border-color: #D97706; color: #D97706; background-color: #FFFBEB; }
         .tab-btn-generici.active { border-color: #7C3AED; color: #7C3AED; background-color: #F5F3FF; }
+        .tab-btn-edugems.active { border-color: #E11D48; color: #E11D48; background-color: #FFF1F2; }
+
+        /* Leggibilita e coerenza: testo dei prompt uniforme e piu grande */
+        .prompt-text {
+            font-size: 0.875rem;   /* 14px minimo (prima 12px) */
+            line-height: 1.6;
+            font-style: normal;     /* uniforma il testo prompt (niente mix italic/mono) */
+        }
+        #noResults {
+            display: none;
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
@@ -48,13 +67,17 @@
     </div>
 
     <!-- Header / Hero Section -->
-    <header class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white border-b border-slate-700/50 sticky top-0 z-40 backdrop-blur-md">
+    <header class="bg-gradient-to-br from-mendel-800 to-mendel-900 text-white border-b border-mendel-900 sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="logo-mendel.png" alt="Logo IIS Mendel" class="w-10 h-10 rounded-full bg-white p-0.5 object-contain shrink-0" onerror="this.style.display='none'">
+                        <span class="text-[11px] uppercase tracking-widest text-white/80 font-semibold">IIS Gregorio Mendel &middot; Villa Cortese (MI)</span>
+                    </div>
                     <div class="flex items-center gap-3 mb-1">
-                        <span class="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-2.5 py-1 rounded-full border border-indigo-400/30">Versione V3</span>
-                        <span class="text-xs text-slate-400">Hub Strategico Prompts & Sistemi IA</span>
+                        <span class="bg-white/15 text-white text-xs font-semibold px-2.5 py-1 rounded-full border border-white/30">Versione V4 Enciclopedica</span>
+                        <span class="text-xs text-white/70">Hub Didattica, Ricerca & Prompt Engineering</span>
                     </div>
                     <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
                         Raccolta Organizzata dei Prompt e Sistemi IA
@@ -65,7 +88,7 @@
                 <div class="relative w-full md:w-80">
                     <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" id="searchInput" placeholder="Cerca prompt o argomento..." 
-                        class="w-full bg-slate-800/90 text-slate-100 placeholder-slate-400 text-sm pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                        class="w-full bg-slate-800/90 text-slate-100 placeholder-slate-400 text-sm pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-mendel-400 transition">
                 </div>
             </div>
 
@@ -84,7 +107,10 @@
                     <i data-lucide="bot" class="w-4 h-4"></i> Anthropic Claude
                 </button>
                 <button onclick="switchTab('generici')" class="tab-btn tab-btn-generici flex items-center gap-2 px-4 py-2.5 rounded-t-lg text-sm font-semibold transition text-slate-300 hover:text-white whitespace-nowrap">
-                    <i data-lucide="graduation-cap" class="w-4 h-4"></i> Didattica & Generici
+                    <i data-lucide="graduation-cap" class="w-4 h-4"></i> Didattica & Prompt Eng.
+                </button>
+                <button onclick="switchTab('edugems')" class="tab-btn tab-btn-edugems flex items-center gap-2 px-4 py-2.5 rounded-t-lg text-sm font-semibold transition text-slate-300 hover:text-white whitespace-nowrap">
+                    <i data-lucide="award" class="w-4 h-4"></i> EduGems & Risorse
                 </button>
             </nav>
         </div>
@@ -93,11 +119,13 @@
     <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
 
+        <div id="noResults">Nessun prompt trovato per la tua ricerca.</div>
+
         <!-- ==================== TAB 1: NOTEBOOKLM ==================== -->
         <div id="tab-notebooklm" class="tab-content">
             <div class="mb-8 bg-teal-50 border border-teal-200 rounded-2xl p-6">
                 <h2 class="text-xl font-bold text-teal-900 flex items-center gap-2 mb-2">
-                    <i data-lucide="book-open" class="w-6 h-6 text-teal-600"></i> NotebookLM - Configurazione & Workflow
+                    <i data-lucide="book-open" class="w-6 h-6 text-teal-600"></i> NotebookLM & Workflow di Apprendimento
                 </h2>
                 <p class="text-teal-800 text-sm">Strategia completa di configurazione, ottimizzazione e trasformazione delle fonti in materiali di apprendimento avanzati.</p>
             </div>
@@ -117,12 +145,12 @@
                     <div class="text-xs font-bold uppercase text-teal-600 mb-1">Passo 2</div>
                     <h3 class="font-bold text-slate-900 mb-2">Ottimizzazione Stile</h3>
                     <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
-                        <li>Imposta il <b>Response Style</b> (Stile di risposta) su <i>Learning Guide</i> (Guida all'apprendimento).</li>
-                        <li>Imposta la <b>Response Length</b> (Lunghezza della risposta) su <i>Longer</i> (Più lunga) per analisi approfondite.</li>
+                        <li>Imposta il <b>Response Style</b> (Stile di risposta) su <i>Learning Guide</i>.</li>
+                        <li>Imposta la <b>Response Length</b> (Lunghezza risposta) su <i>Longer</i> per analisi approfondite.</li>
                     </ul>
                 </div>
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="text-xs font-bold uppercase text-teal-600 mb-1">Passo 4</div>
+                    <div class="text-xs font-bold uppercase text-teal-600 mb-1">Passo 3</div>
                     <h3 class="font-bold text-slate-900 mb-2">Strategia "PAGINA BIANCA" (Clean Slate)</h3>
                     <p class="text-xs text-slate-600">Elimina le fonti originali (video, articoli) dalla barra laterale e aggiungi le note salvate come uniche fonti del notebook per la massima precisione.</p>
                 </div>
@@ -162,28 +190,17 @@
                 </div>
             </div>
 
+            <!-- Workflow Avanzati NotebookLM + Claude (NOVITÀ V4) -->
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="zap" class="w-5 h-5 text-teal-600"></i> Workflow Avanzati NotebookLM + Claude (Nuovo in V4)
+            </h3>
+            <div id="notebook-claude-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"></div>
+
             <!-- Analisi Video YouTube -->
             <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <i data-lucide="youtube" class="w-5 h-5 text-red-600"></i> Analisi e Decostruzione Video YouTube
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
-                <!-- Items 1 to 10 for YouTube -->
-                <script>
-                    const ytPrompts = [
-                        { t: "1. Decostruzione Profonda", it: "Analizza attentamente la fonte video di YouTube fornita e decostruisci l'intera struttura dell'insegnamento. Identifica il problema centrale affrontato nel video, le idee principali introdotte e il modo in cui l'autore sviluppa logicamente la spiegazione per tutto il video. Suddividilo in sezioni e sintetizza l'obiettivo di ciascuna sezione.", en: "Carefully analyze the provided YouTube video source and deconstruct the full structure of the teaching. Identify the central problem the video is addressing, the major ideas introduced, and how the creator logically builds the explanation throughout the video." },
-                        { t: "2. Albero delle Competenze & Dipendenze", it: "Sulla base delle informazioni contenute in questo video, estrai l'insieme completo delle competenze necessarie per padroneggiare l'argomento insegnato. Suddividile in micro-competenze e organizzale in un albero delle competenze gerarchico.", en: "From the information in this video source, extract the complete set of skills required to master the topic being taught. Break these into micro-skills and organize them into a hierarchical skill tree." },
-                        { t: "3. Principio 80/20 (Intuizioni ad Alto Impatto)", it: "Analizza il video e individua il ristretto numero di idee, strategie o tecniche che generano la maggior parte dei risultati quando applicate nella pratica.", en: "Analyze the video and identify the small number of ideas, strategies, or techniques that likely produce the majority of results when applied in practice." },
-                        { t: "4. Guida Operativa di Esecuzione", it: "Converti i consigli pratici presenti in questo video in una guida operativa dettagliata che chiunque possa seguire dall'inizio alla fine.", en: "Convert the practical advice in this video into a detailed execution playbook that someone could follow from start to finish." },
-                        { t: "5. Modelli Mentali & Schemi degli Esperti", it: "Identifica i modelli mentali sottostanti, i framework e gli schemi di ragionamento che il creator utilizza nel video durante la spiegazione dell'argomento.", en: "Identify the underlying mental models, frameworks, and reasoning patterns that the creator uses in this video when explaining the topic." },
-                        { t: "6. Scenari Applicativi Reali", it: "Crea diversi scenari realistici in cui le conoscenze di questo video verrebbero applicate nella pratica.", en: "Create several realistic scenarios where the knowledge from this video would be applied in practice." },
-                        { t: "7. Trappole per Principianti", it: "Analizza il video e identifica gli errori che i principianti rischiano maggiormente di commettere quando cercano di applicare le idee presentate.", en: "Analyze the video and identify the mistakes beginners are most likely to make when trying to implement the ideas presented." },
-                        { t: "8. Percorso di Padronanza Strutturato", it: "Progetta una mappa del percorso di padronanza strutturato basandoti sul contenuto del video.", en: "Design a structured mastery roadmap based on the content of this video." },
-                        { t: "9. Scheda di Sintesi (Cheat Sheet)", it: "Condensa tutte le informazioni chiave di questo video in una scheda di sintesi (cheat sheet) ad alta densità utilizzabile per una rapida revisione ed esecuzione.", en: "Condense all key information from this video into a high-density cheat sheet that can be used for quick review and execution." },
-                        { t: "10. Autovalutazione e Validazione", it: "Crea un sistema strutturato di autovalutazione basato su questo video che permetta di verificare se si è davvero padroneggiato il contenuto.", en: "Create a structured self-testing system based on this video that allows someone to verify whether they have truly mastered the content." }
-                    ];
-                </script>
-                <div id="yt-container" class="contents"></div>
-            </div>
+            <div id="yt-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
 
             <!-- Ricerca Accademica -->
             <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
@@ -204,8 +221,17 @@
                 <h2 class="text-xl font-bold text-blue-900 flex items-center gap-2 mb-2">
                     <i data-lucide="sparkles" class="w-6 h-6 text-blue-600"></i> Gemini & Google Workspace
                 </h2>
-                <p class="text-blue-800 text-sm">Sistemi di apprendimento personalizzato e 25 prompt ad alta efficienza per l'ecosistema Google.</p>
+                <p class="text-blue-800 text-sm">Sistemi di apprendimento personalizzato, esportazione automatica file e 25 prompt ad alta efficienza per l'ecosistema Google.</p>
             </div>
+
+            <!-- Esportazione File Scaricabili (NOVITÀ V4) -->
+            <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                <i data-lucide="file-spreadsheets" class="w-5 h-5 text-blue-600"></i> Generare File Scaricabili direttamente dalla Chat Gemini (Nuovo in V4)
+            </h3>
+            <p class="text-xs text-slate-600 mb-4 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                <b>Come funziona:</b> Specifica l'estensione tra parentesi direttamente nel prompt (es. <code>.pdf</code>, <code>.xlsx</code>, <code>.docx</code>, <code>.pptx</code>). Gemini genererà un pulsante per scaricare direttamente il file o salvarlo su Google Drive.
+            </p>
+            <div id="filegen-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12"></div>
 
             <!-- Sistema Apprendimento Feynman / Primi Principi -->
             <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
@@ -237,10 +263,17 @@
         <div id="tab-claude" class="tab-content hidden">
             <div class="mb-8 bg-amber-50 border border-amber-200 rounded-2xl p-6">
                 <h2 class="text-xl font-bold text-amber-900 flex items-center gap-2 mb-2">
-                    <i data-lucide="bot" class="w-6 h-6 text-amber-600"></i> Anthropic Claude - Lingue & Ottimizzazione
+                    <i data-lucide="bot" class="w-6 h-6 text-amber-600"></i> Anthropic Claude - Lingue & Analisi Scientifica
                 </h2>
-                <p class="text-amber-800 text-sm">Framework completo per l'apprendimento delle lingue e strategie per gestire al meglio i limiti di token.</p>
+                <p class="text-amber-800 text-sm">Framework completo per l'apprendimento delle lingue, analisi sistematica della letteratura scientifica e ottimizzazione token.</p>
             </div>
+
+            <!-- Claude Paper Research System (NOVITÀ V4) -->
+            <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                <i data-lucide="microscope" class="w-5 h-5 text-amber-600"></i> Claude Paper Research System (I 9 Prompt per l'Analisi Scientifica) (Nuovo in V4)
+            </h3>
+            <p class="text-xs text-slate-500 mb-4">Sistema per analizzare, sintetizzare e mappare fino a 40 articoli scientifici in pochi minuti.</p>
+            <div id="claude-paper-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"></div>
 
             <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <i data-lucide="languages" class="w-5 h-5 text-amber-600"></i> Framework per l'Apprendimento delle Lingue (8 Moduli)
@@ -257,13 +290,25 @@
         <div id="tab-generici" class="tab-content hidden">
             <div class="mb-8 bg-purple-50 border border-purple-200 rounded-2xl p-6">
                 <h2 class="text-xl font-bold text-purple-900 flex items-center gap-2 mb-2">
-                    <i data-lucide="graduation-cap" class="w-6 h-6 text-purple-600"></i> Sistema Didattico IA & Padronanza Competenze
+                    <i data-lucide="graduation-cap" class="w-6 h-6 text-purple-600"></i> Didattica, Prompt Engineering & Valutazione
                 </h2>
-                <p class="text-purple-800 text-sm">Sistemi di progettazione didattica, analisi capitoli e roadmap universali per la padronanza in 30 giorni.</p>
+                <p class="text-purple-800 text-sm">Metodologie avanzate di ottimizzazione del prompt, schede didattiche visive e prompt specializzati per la scuola.</p>
             </div>
 
+            <!-- Prompt Engineering & Visiva (NOVITÀ V4) -->
             <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <i data-lucide="book-open-check" class="w-5 h-5 text-purple-600"></i> Sistema Didattico IA (Progettazione Lezioni e Didattica)
+                <i data-lucide="sliders" class="w-5 h-5 text-purple-600"></i> Prompt Engineering & Schede Visive Stampabili (Nuovo in V4)
+            </h3>
+            <div id="prompteng-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"></div>
+
+            <!-- Prompt Didattici Specializzati (NOVITÀ V4) -->
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="book-check" class="w-5 h-5 text-purple-600"></i> Guida ai Prompt Didattici Specializzati (Nuovo in V4)
+            </h3>
+            <div id="specialized-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"></div>
+
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="book-open-check" class="w-5 h-5 text-purple-600"></i> AI Teaching System (Progettazione Lezioni)
             </h3>
             <div id="teaching-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"></div>
 
@@ -273,12 +318,74 @@
             <div id="universal-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
 
+        <!-- ==================== TAB 6: EDUGEMS & RISORSE (NOVITÀ V4) ==================== -->
+        <div id="tab-edugems" class="tab-content hidden">
+            <div class="mb-8 bg-rose-50 border border-rose-200 rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-rose-900 flex items-center gap-2 mb-2">
+                    <i data-lucide="award" class="w-6 h-6 text-rose-600"></i> EduGems & Risorse Ecosystem per la Scuola
+                </h2>
+                <p class="text-rose-800 text-sm">Gems personalizzate per la scuola italiana, adattamento di EduGems internazionali e strumenti innovativi.</p>
+            </div>
+
+            <!-- EduGems Emilia Sera -->
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-5 h-5 text-rose-600"></i> Gemme a chilometro zero: EduGems di Emilia Sera
+            </h3>
+            <div id="edugems-sera-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"></div>
+
+            <!-- EduGems Curts & MusaiLab -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-rose-100 text-rose-800 text-xs font-bold px-2.5 py-0.5 rounded-full">Eric Curts</span>
+                            <h4 class="font-bold text-slate-900 text-sm">Adattamento EduGems Internazionali (edugems.ai)</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3">Piattaforma con oltre 100 Gems preconfigurate. Fai una copia della Gem (<i>Make your own copy</i>) e aggiungi in fondo il seguente prompt di contestualizzazione per l'Italia:</p>
+                        <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono mb-4 prompt-text leading-relaxed">"Always respond in Italian, regardless of the language used in the conversation. Adapt all content to the Italian school context: refer to the Indicazioni Nazionali (or Linee Guida for secondary schools) instead of American standards, use the Italian grading system (votes from 1 to 10), and consider the Italian school structure (Scuola Primaria, Scuola Secondaria di Primo Grado, Scuola Secondaria di Secondo Grado). When mentioning school years, use the Italian terminology (classe prima, seconda, etc.)."</p>
+                    </div>
+                    <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-700 text-xs font-semibold py-2 rounded transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Istruzione di Adattamento
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-0.5 rounded-full">Elisabetta Nanni</span>
+                            <h4 class="font-bold text-slate-900 text-sm">MusaiLab Chatbot</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3">Chatbot progettato da Elisabetta Nanni per supportare gli insegnanti nella progettazione di risorse didattiche musicali inclusive e innovative. MusaiLab è nativamente in italiano e perfettamente integrato con le Indicazioni Nazionali.</p>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-xs text-slate-700 space-y-1">
+                            <div>• <b>Caratteristica principale:</b> Nativamente italiano</div>
+                            <div>• <b>Focus:</b> Didattica musicale inclusiva e innovativa</div>
+                            <div>• <b>Integrazione:</b> Indicazioni Nazionali MIUR</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Strumento Didattico di Riferimento</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 mt-12 text-center text-xs">
-        <div class="max-w-7xl mx-auto px-4 font-medium">
-            Pagina creata da Massimiliano Crespi per l'IIS MENDEL di Villa Cortese (MI)
+    <footer class="bg-mendel-900 text-white/80 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between gap-6 items-start">
+                <div>
+                    <div class="font-bold text-white text-base mb-1">Istituto di Istruzione Superiore &quot;Gregorio Mendel&quot;</div>
+                    <div class="text-sm">Via Ferrazzi, 15 &mdash; 20020 Villa Cortese (MI)</div>
+                    <a href="https://agrariomendel.edu.it/" class="text-sm text-mendel-300 hover:underline inline-flex items-center gap-1 mt-2">
+                        <i data-lucide="globe" class="w-4 h-4"></i> agrariomendel.edu.it
+                    </a>
+                </div>
+                <div class="text-xs text-white/60 md:text-right">
+                    Pagina creata da Massimiliano Crespi<br>per l'IIS Mendel di Villa Cortese (MI)
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -305,7 +412,6 @@
 
             if (!text) return;
 
-            // Fallback for document.execCommand inside sandboxed iFrames
             const textarea = document.createElement('textarea');
             textarea.value = text;
             textarea.style.position = 'fixed';
@@ -338,20 +444,74 @@
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const query = e.target.value.toLowerCase().trim();
             const cards = document.querySelectorAll('.prompt-card');
-            
+            const noResults = document.getElementById('noResults');
+
+            // Ricerca vuota: torna alla normale vista a tab (mostra solo la tab attiva)
+            if (query === '') {
+                const activeBtn = document.querySelector('.tab-btn.active');
+                let activeId = 'notebooklm';
+                if (activeBtn) {
+                    const m = activeBtn.className.match(/tab-btn-([a-z]+)/);
+                    if (m) activeId = m[1];
+                }
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+                const activeTab = document.getElementById('tab-' + activeId);
+                if (activeTab) activeTab.classList.remove('hidden');
+                cards.forEach(card => card.style.display = '');
+                noResults.style.display = 'none';
+                return;
+            }
+
+            // Durante la ricerca: mostra TUTTE le tab e filtra su tutte le card
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('hidden'));
+            let visible = 0;
             cards.forEach(card => {
                 const text = card.innerText.toLowerCase();
-                if (text.includes(query)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
+                if (text.includes(query)) { card.style.display = ''; visible++; }
+                else { card.style.display = 'none'; }
             });
+            noResults.style.display = (visible === 0) ? 'block' : 'none';
         });
 
         // Dynamic Population of Data
         document.addEventListener('DOMContentLoaded', () => {
-            // Render YT Prompts
+
+            // 1. NotebookLM + Claude Workflow Data (NEW V4)
+            const notebookClaudeData = [
+                { title: "1. Sviluppare competenze settoriali in 30 giorni", prompt: "Sei un esperto di livello mondiale, un ricercatore e un progettista didattico specializzato nell'apprendimento accelerato e nello sviluppo di competenze profonde. Il tuo compito è aiutarmi a costruire una solida competenza in: [SETTORE]\n\nContesto: Il mio attuale livello [DESCRIVI], Perché voglio imparare [MOTIVO], Ore a settimana [X], Profondità target [LIVELLO].\n\nProgetta un sistema di apprendimento di 30 giorni con: Panoramica della Strategia, 10 Risorse Essenziali per NotebookLM, 5 Esperti e Pensatori, Piano Settimanale dettagliato, Prompt di Riflessione per Claude, Concetti Fondamentali, Test di Conoscenza Settimanali e Risultato al 30° Giorno." },
+                { title: "2. Trasformare le panoramiche audio di NotebookLM in azioni", prompt: "Agisci come uno stratega dell'apprendimento ad alte prestazioni. Ho ascoltato una panoramica audio di NotebookLM su [ARGOMENTO] basata su [FONTI].\n\nIl tuo compito è trasformare l'apprendimento passivo in azioni pratiche. Fornisci: L'Insight a Più Alto Impatto, L'Esperimento di Questa Settimana (a basso attrito), La Migliore Domanda di Follow-up, Idea per un Contenuto Online, Modello Mentale di Base, Influenza sul Lavoro Attuale e un'Azione da completare in 10 Minuti." },
+                { title: "3. Estrarre i modelli mentali alla base di un libro", prompt: "Sei un esperto di modelli mentali. Ho usato NotebookLM per riassumere [NOME DEL LIBRO].\n\nEstrai l'architettura di pensiero più profonda: Modello Mentale Centrale, Framework Nascosto (3-5 passaggi), Convinzione Anticonformista, Quando Questo Modello Funziona vs Quando Fallisce, Pensatori e Libri Correlati, Applicazione nel Mondo Reale QUESTA SETTIMANA e Cheat Sheet per la Memoria a Lungo Termine." },
+                { title: "4. Rilevare bias e ragionamenti deboli nella ricerca", prompt: "Agisci come un metodologo della ricerca e valutatore di prove. Ho esaminato una fonte tramite NotebookLM [INCOLLA RIASSUNTO].\n\nFornisci: Bias Probabili (finanziari, ideologici, di selezione), Analisi dell'Affermazione Più Forte, Analisi dell'Affermazione Più Debole, Prospettive Mancanti, Controllo di Metodologia e Credibilità, 3 Fonti per la Triangolazione e un Punteggio di Fiducia (Trust Score 1-10) motivato." },
+                { title: "5. Trasformare la ricerca in una tesi difendibile", prompt: "Agisci come un consulente strategico senior. Ho estratto insight da NotebookLM.\n\nMetti sotto stress la ricerca e fornisci: Tesi Centrale (1 frase), 3 Argomentazioni a Supporto, 2 Controargomentazioni, La Critica dello Scettico Più Intelligente, Migliore Confutazione, Livello di Confidenza (60%, 80%, 95%), L'unico Dato che Cambia la Decisione e una Sintesi Esecutiva per il CEO." }
+            ];
+            const ncContainer = document.getElementById('notebook-claude-container');
+            notebookClaudeData.forEach(p => {
+                ncContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2 text-teal-700">${p.title}</h4>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 italic mb-4 prompt-text leading-relaxed whitespace-pre-line">"${p.prompt}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 text-xs font-semibold py-2 rounded transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt Workflow
+                        </button>
+                    </div>
+                `;
+            });
+
+            // Render YT Prompts Data
+            const ytPrompts = [
+                { t: "1. Decostruzione Profonda", it: "Analizza attentamente la fonte video di YouTube fornita e decostruisci l'intera struttura dell'insegnamento. Identifica il problema centrale affrontato nel video, le idee principali introdotte e il modo in cui l'autore sviluppa logicamente la spiegazione per tutto il video. Suddividilo in sezioni e sintetizza l'obiettivo di ciascuna sezione.", en: "Carefully analyze the provided YouTube video source and deconstruct the full structure of the teaching. Identify the central problem the video is addressing, the major ideas introduced, and how the creator logically builds the explanation throughout the video." },
+                { t: "2. Albero delle Competenze & Dipendenze", it: "Sulla base delle informazioni contenute in questo video, estrai l'insieme completo delle competenze necessarie per padroneggiare l'argomento insegnato. Suddividile in micro-competenze e organizzale in un albero delle competenze gerarchico.", en: "From the information in this video source, extract the complete set of skills required to master the topic being taught. Break these into micro-skills and organize them into a hierarchical skill tree." },
+                { t: "3. Principio 80/20 (Intuizioni ad Alto Impatto)", it: "Analizza il video e individua il ristretto numero di idee, strategie o tecniche che generano la maggior parte dei risultati quando applicate nella pratica.", en: "Analyze the video and identify the small number of ideas, strategies, or techniques that likely produce the majority of results when applied in practice." },
+                { t: "4. Guida Operativa di Esecuzione", it: "Converti i consigli pratici presenti in questo video in una guida operativa dettagliata che chiunque possa seguire dall'inizio alla fine.", en: "Convert the practical advice in this video into a detailed execution playbook that someone could follow from start to finish." },
+                { t: "5. Modelli Mentali & Schemi degli Esperti", it: "Identifica i modelli mentali sottostanti, i framework e gli schemi di ragionamento che il creator utilizza nel video durante la spiegazione dell'argomento.", en: "Identify the underlying mental models, frameworks, and reasoning patterns that the creator uses in this video when explaining the topic." },
+                { t: "6. Scenari Applicativi Reali", it: "Crea diversi scenari realistici in cui le conoscenze di questo video verrebbero applicate nella pratica.", en: "Create several realistic scenarios where the knowledge from this video would be applied in practice." },
+                { t: "7. Trappole per Principianti", it: "Analizza il video e identifica gli errori che i principianti rischiano maggiormente di commettere quando cercano di applicare le idee presentate.", en: "Analyze the video and identify the mistakes beginners are most likely to make when trying to implement the ideas presented." },
+                { t: "8. Percorso di Padronanza Strutturato", it: "Progetta una mappa del percorso di padronanza strutturato basandoti sul contenuto del video.", en: "Design a structured mastery roadmap based on the content of this video." },
+                { t: "9. Scheda di Sintesi (Cheat Sheet)", it: "Condensa tutte le informazioni chiave di questo video in una scheda di sintesi (cheat sheet) ad alta densità utilizzabile per una rapida revisione ed esecuzione.", en: "Condense all key information from this video into a high-density cheat sheet that can be used for quick review and execution." },
+                { t: "10. Autovalutazione e Validazione", it: "Crea un sistema strutturato di autovalutazione basato su questo video che permetta di verificare se si è davvero padroneggiato il contenuto.", en: "Create a structured self-testing system based on this video that allows someone to verify whether they have truly mastered the content." }
+            ];
             const ytContainer = document.getElementById('yt-container');
             ytPrompts.forEach(p => {
                 ytContainer.innerHTML += `
@@ -381,15 +541,15 @@
 
             // Academic Prompts
             const academicData = [
-                { t: "1. Mappare il Panorama della Ricerca", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO]. Crea un quadro d'insieme strutturato elencando ogni fonte per autore, anno di pubblicazione, titolo, tesi centrale, temi principali, punti di consenso e prospettive contrapposte.", en: "Analyze all uploaded sources related to [TOPIC]. Create a structured overview listing each source by author, publication year, title, and its central thesis. Organize sources by author, year, title, core thesis, themes, consensus, and competing viewpoints." },
-                { t: "2. Mappare le Tesi Contestate", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO] e identifica le principali tesi contestate nella letteratura. Confronta dove i ricercatori concordano o discordano, sintetizza ciascuna posizione, valuta le prove emersi ed evidenzia i dibattiti irrisolti.", en: "Analyze all uploaded sources related to [TOPIC] and identify the major contested claims across the literature. Compare where researchers agree or disagree, summarize each side, evaluate the evidence, and surface unresolved debates." },
-                { t: "3. Tracciare l'Evoluzione delle Idee", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO] e individua i concetti più influenti. Segui lo sviluppo dei concetti dalle prime pubblicazioni fino ai lavori più recenti ed evidenzia i punti di svolta chiave.", en: "Analyze all uploaded sources related to [TOPIC] and identify influential concepts. Follow influential concepts from early publications to recent work and highlight the key turning points." },
-                { t: "4. Identificare Research Gap ad Alto Impatto", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO] e individua i principali interrogativi irrisolti. Individua le domande aperte più importanti, spiega perché rimangono tali e classifica il loro impatto potenziale.", en: "Analyze all uploaded sources related to [TOPIC] and identify the most important unanswered questions, explain why they remain open, and rank their impact." },
-                { t: "5. Costruire una Strategia per Conferenze", it: "Utilizzando il programma del convegno e i miei interessi di ricerca in [SETTORE], dai la priorità alle sessioni più rilevanti, individua le persone chiave da incontrare e crea opportunità di networking mirate.", en: "Build a Conference Strategy: Prioritize the most relevant sessions, identify key people to meet, and create smarter networking opportunities." },
-                { t: "6. Trasformare i Feedback in Piano di Revisione", it: "Analizza tutti i feedback di revisori, supervisori e coautori. Consolida i commenti in temi e problemi ricorrenti e crea un piano di revisione prioritizzato per il manoscritto.", en: "Turn Feedback Into a Revision Plan: Consolidate reviewer, supervisor, and co-author feedback into themes, recurring issues, and priority revisions." },
-                { t: "7. Rafforzare la Sezione Lead Investigator", it: "Allinea il mio CV, l'elenco delle pubblicazioni e il profilo di ricerca con i criteri di valutazione del bando di finanziamento (grant) e le aspettative dei revisori.", en: "Strengthen the Lead Investigator Section: Align your CV, publications, and research profile with the grant's evaluation criteria and reviewer expectations." },
-                { t: "8. Sintetizzare la Letteratura", it: "Utilizzando esclusivamente le fonti caricate relative a [ARGOMENTO], produci una sintesi completa della letteratura anziché singoli riassunti dei paper.", en: "Using only the uploaded sources related to [TOPIC], produce a comprehensive literature synthesis rather than individual paper summaries." },
-                { t: "9. Spiegare il Settore in Parole Semplici", it: "Utilizzando solo le fonti caricate relative a [ARGOMENTO], spiega lo stato attuale della ricerca in un linguaggio chiaro e semplice per un pubblico di non specialisti.", en: "Using only the uploaded sources related to [TOPIC], explain the current state of the research in clear, plain English for a non-specialist audience." }
+                { t: "1. Mappare il Panorama della Ricerca", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO]. Crea un quadro d'insieme strutturato elencando ogni fonte per autore, anno di pubblicazione, titolo, tesi centrale, temi principali, punti di consenso e prospettive contrapposte.", en: "Analyze all uploaded sources related to [TOPIC]. Create a structured overview listing each source by author, publication year, title, and its central thesis." },
+                { t: "2. Mappare le Tesi Contestate", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO] e identifica le principali tesi contestate nella letteratura.", en: "Analyze all uploaded sources related to [TOPIC] and identify the major contested claims across the literature." },
+                { t: "3. Tracciare l'Evoluzione delle Idee", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO] e individua i concetti più influenti.", en: "Analyze all uploaded sources related to [TOPIC] and identify influential concepts." },
+                { t: "4. Identificare Research Gap ad Alto Impatto", it: "Analizza tutte le fonti caricate relative a [ARGOMENTO] e individua i principali interrogativi irrisolti.", en: "Analyze all uploaded sources related to [TOPIC] and identify the most important unanswered questions." },
+                { t: "5. Strategia per Conferenze", it: "Utilizzando il programma del convegno e i miei interessi di ricerca in [SETTORE], dai la priorità alle sessioni più rilevanti.", en: "Build a Conference Strategy: Prioritize the most relevant sessions and identify key people to meet." },
+                { t: "6. Feedback in Piano di Revisione", it: "Analizza tutti i feedback di revisori, supervisori e coautori. Consolida i commenti in temi e problemi ricorrenti.", en: "Turn Feedback Into a Revision Plan: Consolidate reviewer feedback into themes and priority revisions." },
+                { t: "7. Sezione Lead Investigator", it: "Allinea il mio CV, l'elenco delle pubblicazioni e il profilo di ricerca con i criteri di valutazione del bando di finanziamento.", en: "Strengthen the Lead Investigator Section: Align CV and publications with grant evaluation criteria." },
+                { t: "8. Sintetizzare la Letteratura", it: "Utilizzando esclusivamente le fonti caricate relative a [ARGOMENTO], produci una sintesi completa della letteratura.", en: "Using only the uploaded sources related to [TOPIC], produce a comprehensive literature synthesis." },
+                { t: "9. Spiegare il Settore in Parole Semplici", it: "Utilizzando solo le fonti caricate relative a [ARGOMENTO], spiega lo stato attuale della ricerca in un linguaggio chiaro e semplice.", en: "Using only the uploaded sources related to [TOPIC], explain the current state of the research in clear, plain English." }
             ];
             const academicContainer = document.getElementById('academic-container');
             academicData.forEach(p => {
@@ -433,6 +593,30 @@
                         </div>
                         <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
                             <i data-lucide="copy" class="w-3 h-3"></i> Copia Prompt
+                        </button>
+                    </div>
+                `;
+            });
+
+            // 2. Gemini File Generation Prompts (NEW V4)
+            const fileGenData = [
+                { fmt: "PDF", title: "PDF Scheda Riassuntiva", text: "Crea una scheda riassuntiva sulla Seconda Guerra Mondiale per studenti di terza media (.pdf). Includi: cause, eventi principali, conseguenze e una cronologia sintetica." },
+                { fmt: "Excel (.xlsx)", title: "Excel Registro Voti Completo", text: "Crea un registro voti per una classe di 25 studenti (.xlsx). Le colonne devono essere: Nome, Cognome, Voto Interrogazione 1, Voto Interrogazione 2, Voto Compito in Classe, Media Automatica. Formattazione condizionale per medie < 6 in rosso." },
+                { fmt: "Google Slides", title: "Google Slides Fotosintesi", text: "Crea una presentazione in Google Slides di 8 slide sulla fotosintesi clorofilliana per una seconda superiore. Titolo, 3-4 punti chiave e spazio immagine per ciascuna slide." },
+                { fmt: "Word (.docx)", title: "Word Verifica Geometria", text: "Crea una verifica scritta (.docx) sulla geometria euclidea per una classe prima superiore. 3 domande aperte, 5 esercizi di calcolo, 2 problemi applicativi e intestazione." },
+                { fmt: "Excel (.xlsx)", title: "Excel Importazione Registro", text: "Crea un file (.xlsx) con una classe fittizia di 20 studenti, colonne per Nome, Cognome, Classe, Sezione ed Email scolastica (nome.cognome@scuola.it)." }
+            ];
+            const fgContainer = document.getElementById('filegen-container');
+            fileGenData.forEach(p => {
+                fgContainer.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">${p.fmt}</span>
+                            <h4 class="font-bold text-slate-900 text-xs my-2">${p.title}</h4>
+                            <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded border border-slate-100 italic mb-3 prompt-text">"${p.text}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Copia Prompt File
                         </button>
                     </div>
                 `;
@@ -504,6 +688,33 @@
                         </div>
                         <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-semibold py-1 rounded transition flex items-center justify-center gap-1">
                             <i data-lucide="copy" class="w-3 h-3"></i> Copia Prompt
+                        </button>
+                    </div>
+                `;
+            });
+
+            // 3. Claude Paper Research System Data (NEW V4)
+            const claudePaperData = [
+                { title: "1. Il Protocollo di Acquisizione (Intake Protocol)", prompt: "Condividerò [X] articoli su [ARGOMENTO]. Prima di rispondere a qualsiasi domanda, elenca ciascun articolo indicando autore, anno di pubblicazione e una sola frase di tesi centrale. Raggruppa gli articoli in cluster in base ai presupposti condivisi, individua eventuali articoli che si contraddicono direttamente tra loro e mappa il panorama generale della ricerca senza riassumere i singoli articoli." },
+                { title: "2. Il Rilevatore di Contraddizioni (Contradiction Detector)", prompt: "Esamina tutti gli articoli caricati e identifica ogni punto in cui due o più autori si contraddicono direttamente. Per ciascuna contraddizione, spiega entrambe le posizioni, indica gli articoli specifici coinvolti e descrivi perché il disaccordo probabilmente esiste (es. differenze di metodologia, dataset o epoca di pubblicazione). Presenta i risultati in una tabella comparativa chiara." },
+                { title: "3. La Catena delle Citazioni (Citation Chain)", prompt: "Identifica i tre concetti più frequentemente citati in tutti gli articoli caricati. Per ciascun concetto, spiega chi lo ha introdotto per primo, chi lo ha successivamente messo in discussione, chi lo ha raffinato o ampliato e qual è l'attuale consenso accademico, se esiste. Presenta lo sviluppo intellettuale sotto forma di linea genealogica (albero genealogico delle idee) mostrando come ogni concetto si è evoluto nel tempo." },
+                { title: "4. Lo Scanner delle Lacune di Ricerca (Gap Scanner)", prompt: "Analizza tutti gli articoli caricati e identifica cinque importanti domande di ricerca che rimangono senza risposta. Per ciascuna lacuna, spiega perché esiste ancora (se perché tecnicamente difficile, troppo di nicchia o ampiamente ignorata), individua l'articolo che si è avvicinato di più ad affrontarla e raccomanda la metodologia più probabile per risolverla." },
+                { title: "5. L'Audit Metodologico (Methodological Audit)", prompt: "Esamina le metodologie utilizzate in tutti gli articoli caricati e raggruppale in categorie come sondaggi, esperimenti, simulazioni, meta-analisi e casi di studio. Quindi identifica quale metodologia domina il settore e spiega perché, quale approccio è sotto-utilizzato e quale metodologia appare la più debole, includendo le ragioni alla base di tale valutazione." },
+                { title: "6. La Sintesi Principale (Master Synthesis)", prompt: "Utilizzando la tua piena comprensione della letteratura caricata, scrivi una sintesi che non riassuma i singoli articoli. Spiega invece cosa crede collettivamente il settore, quali questioni rimangono discusse, quali risultati sono supportati oltre ogni ragionevole dubbio e concludi con la singola domanda di ricerca irrisolta più importante. Mantieni la risposta sotto le 400 parole ed evita riempitivi non necessari." },
+                { title: "7. Il Distruttore di Presupposti (Assumption Destroyer)", prompt: "Identifica i presupposti su cui si basa la maggior parte di questi articoli senza dimostrarli o giustificarli esplicitamente. Per ciascun presupposto, spiegalo chiaramente, individua uno o due articoli che vi fanno maggiore affidamento e descrivi come cambierebbe il settore se quel presupposto si rivelasse falso." },
+                { title: "8. Il Costruttore della Mappa della Conoscenza (Knowledge Map Builder)", prompt: "Crea una mappa strutturata della conoscenza di tutta la letteratura caricata. Includi la tesi centrale attorno a cui ruota il settore, da tre a cinque pilastri di supporto ben consolidati, da due a tre aree attive di dibattito, una o due domande di frontiera irrisolte e raccomanda i tre articoli che ogni debuttante dovrebbe leggere per primi, spiegando perché ciascuno è essenziale. Presenta l'output come uno schema pulito e non come prosa continua." },
+                { title: "9. Il Test del \"E Quindi?\" (\"So What?\" Test)", prompt: "Immagina di avere cinque minuti per spiegare l'intero corpo di ricerca a un non esperto intelligente. Riassumi il settore affermando, in una sola frase, ciò che è stato definitivante dimostrato, descrivi in modo onesto la singola cosa più grande che i ricercatori ancora non sanno e spiega l'unica implicazione del mondo reale che conta di più. Usa un linguaggio semplice, senza gergo o stile di scrittura accademico." }
+            ];
+            const cpContainer = document.getElementById('claude-paper-container');
+            claudePaperData.forEach(p => {
+                cpContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2 text-amber-800">${p.title}</h4>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 italic mb-4 prompt-text leading-relaxed">"${p.prompt}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-700 text-xs font-semibold py-2 rounded transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt Analisi
                         </button>
                     </div>
                 `;
@@ -589,6 +800,60 @@
                 `;
             });
 
+            // 4. Prompt Eng & Schede Visive Data (NEW V4)
+            const promptEngData = [
+                {
+                    title: "Trucco Valutazione (0-10) e Auto-Ottimizzazione",
+                    desc: "Fai valutare e perfezionare il prompt direttamente all'IA in due passi:\nPasso 1: \"Dai un voto a questo prompt da 0 a 10: [PROMPT]\"\nPasso 2: \"Cosa renderebbe questo prompt un 10/10? Scrivi e perfeziona tu il prompt.\"",
+                    prompt: "Agisci esclusivamente come Gaio Giulio Cesare, nell’anno 44 a.C., subito dopo essere stato nominato dittatore a vita della Repubblica romana. Ti trovi nel Foro di Roma e stai parlando a un gruppo di giovani cittadini romani di circa 10 anni (i miei studenti). Rispondi alle loro domande come se fossi davvero Cesare, senza mai uscire dal personaggio.\n\nRegole fondamentali:\n• Usa un linguaggio semplice, diretto e solenne, adatto a bambini di 10 anni.\n• Usa espressioni e immagini tipiche del mondo romano (legioni, Foro, Senato, dei, aquile, toghe).\n• Non usare mai parole o concetti moderni.\n• Spiega concetti complessi con esempi tratti dalla vita quotidiana romana.\n• Mantieni risposte brevi e dialogate.\n\nInizia con un breve discorso di apertura (3–4 frasi), poi attendi le domande."
+                },
+                {
+                    title: "Scheda Didattica Stampabile con IA Visiva",
+                    desc: "Usa questo prompt modello con ChatGPT Plus (DALL-E 3) o Gemini Imagen per generare schede didattiche pronte da stampare basate sull'apprendimento attivo.",
+                    prompt: "CREA UN'IMMAGINE DI UNA SCHEDA DIDATTICA STAMPABILE IN ITALIANO SU [ARGOMENTO] PER STUDENTI DI [CLASSE]. Formato verticale, 8.5 x 11 pollici, alta risoluzione, design chiaro, pulito e facile da stampare. Stile scolastico organizzato con bacheche e banchine per scrittura. Includi bordi arrotondati, icone eleganti, ampio spazio per la scrittura e composizione equilibrata.\n\nTITOLO PRINCIPALE: \"SCOPRIREMO... [DOMANDA PRINCIPALE]\"\nFUMETTO GUIDA: \"[DOMANDA PER ATTIVARE LE CONOSCENZE PREGRESSE]\"\nDIVIDI IN 4 SEZIONI:\n1. ESPLORA E OSSERVA (illustrazione + righe per osservazioni)\n2. COSTRUIAMO L'IDEA INSIEME (organizzatore visivo / mappa concettuale)\n3. STABILIRE DEI COLLEGAMENTI (domande di pensiero critico)\n4. RIFLETTI E RIASSUMI (riquadro finale + \"Oggi ho imparato che...\")"
+                }
+            ];
+            const peContainer = document.getElementById('prompteng-container');
+            promptEngData.forEach(p => {
+                peContainer.innerHTML += `
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-purple-900 text-sm mb-2">${p.title}</h4>
+                            <p class="text-xs text-slate-600 mb-3 whitespace-pre-line">${p.desc}</p>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono mb-4 prompt-text leading-relaxed whitespace-pre-line">"${p.prompt}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-700 text-xs font-semibold py-2 rounded transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt Modello
+                        </button>
+                    </div>
+                `;
+            });
+
+            // 5. Specialized Prompts Data (NEW V4)
+            const specializedData = [
+                { title: "1. Schede Didattiche per Italiano L2", prompt: "Sei un insegnante esperto di Italiano L2 e un instructional designer esperto nella creazione di risorse coinvolgenti per i tuoi studenti. Il tuo compito è generare una scheda didattica da completare con 15-25 frasi e un archivio di parole per i miei studenti di [CLASSE/LIVELLO] che stanno imparando l'italiano come seconda lingua. Gli studenti hanno un livello [PRINCIPIANTE / INTERMEDIO / AVANZATO] di conoscenza della lingua italiana." },
+                { title: "2. Generare Idee per Piani di Lezione", prompt: "Sei un insegnante esperto di [GRADO E MATERIA], abile nel creare piani di lezione coinvolgenti ed efficaci. Il tuo compito è elaborare 3 idee per i piani di lezione nella nostra unità su [ARGOMENTO]. I piani di lezione dovrebbero durare [X] minuti ciascuno e dovrebbero basarsi l'uno sull'altro. Le lezioni dovrebbero concentrarsi su: [ARGOMENTI SPECIFICI]. Ogni lezione deve includere: obiettivi di apprendimento, parole chiave, scaletta della lezione con istruzioni dirette, attività pratica e riepilogo con valutazione." },
+                { title: "3. Gamification da Piano di Lezione", prompt: "Sei un insegnante esperto, abile nel creare esperienze di apprendimento stimolanti. Il tuo compito è utilizzare il seguente piano di lezione per i miei studenti di [LIVELLO E MATERIA] che studiano [ARGOMENTO] e creare un'attività gamificata. L'attività deve essere adatta all'età, impiegare [TEMPO ASSEGNATO] e raggiungere gli stessi obiettivi di apprendimento del piano originale:\n\n[INCOLLA TESTO DEL PIANO DI LEZIONE]" },
+                { title: "4. Generare Rubriche di Valutazione", prompt: "Sei un insegnante esperto e redattore di programmi di studio. Il tuo compito è creare una rubrica di valutazione per la mia classe di [LIVELLO E MATERIA] che studia [ARGOMENTO]. I miei studenti stanno completando [TITOLO DEL COMPITO], in cui [DESCRIZIONE COMPITO]. Formatta la rubrica come una tabella comparativa e includi una scala di valutazione a 5 livelli." },
+                { title: "5. Valutazioni Autentiche", prompt: "Sei un insegnante esperto nello sviluppo di valutazioni autentiche ed efficaci. Crea 3 valutazioni autentiche [FORMATIVE O SOMMATIVE] per la mia classe di [LIVELLO E MATERIA] che studia [ARGOMENTO]. Le valutazioni dovrebbero misurare [STANDARD DI CONTENUTO], enfatizzando l'applicazione pratica nel mondo reale, compiti complessi e feedback significativi." },
+                { title: "6. Partner di Conversazione Linguistica (per Studenti)", prompt: "Per questa interazione, assumerai il ruolo di un/a [PERSONA] di [CITTÀ/PAESE]. Ti farò una serie di domande in [LINGUA] e il tuo compito sarà rispondere in modo colloquiale in [LINGUA]. Dovrai fungere da mio interlocutore mentre io metto in pratica la mia capacità di scrivere/parlare in questa lingua." },
+                { title: "7. Progettare Attività Resistenti all'IA", prompt: "Sei un insegnante esperto con competenza nella progettazione di attività di valutazione autentiche. Aiutami a progettare una prova resistente all'IA per studenti di [CLASSE] che affronti [ARGOMENTO] in modo pratico e coinvolgente. La prova deve concentrarsi sul processo anziché sul prodotto, integrando il pensiero critico, la creatività e una componente di presentazione orale o di performance." }
+            ];
+            const specContainer = document.getElementById('specialized-container');
+            specializedData.forEach(p => {
+                specContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-purple-900 text-sm mb-2">${p.title}</h4>
+                            <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono mb-4 prompt-text leading-relaxed">"${p.prompt}"</p>
+                        </div>
+                        <button onclick="copyPrompt(this)" class="w-full bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-700 text-xs font-semibold py-2 rounded transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Prompt Didattico
+                        </button>
+                    </div>
+                `;
+            });
+
             // Teaching System
             const teachingData = [
                 { title: "1. Struttura Didattica e Analisi Capitolo", prompt: "Sei un insegnante esperto con 25 anni di esperienza di insegnamento in classe. Analizza questo capitolo in modo approfondito. Non riassumere. Identifica invece la struttura didattica. Restituisci la tua risposta utilizzando le seguenti intestazioni:\n1. Obiettivi di apprendimento | 2. Conoscenze preliminari | 3. Concetti principali | 4. Elenco formule importanti | 5. Mappa delle dipendenze concettuali | 6. Errori e concetti errati comuni degli studenti | 7. Argomenti frequentemente confusi | 8. Esempi reali | 9. Concetti visivi | 10. Attività in classe | 11. Trucchi mnemonici | 12. Aree importanti per gli esami | 13. Concetti HOTS (Competenze di pensiero di ordine superiore) | 14. Panoramica del capitolo in una pagina" },
@@ -640,6 +905,40 @@
                             <button onclick="copyPrompt(null, '${p.en.replace(/'/g, "\\'")}')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-1.5 rounded transition flex items-center justify-center gap-1">
                                 <i data-lucide="copy" class="w-3 h-3"></i> Copia EN
                             </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 6. EduGems Emilia Sera Data (NEW V4)
+            const eduGemsSera = [
+                {
+                    cat: "EduSTEM",
+                    title: "MathScratch Tutor",
+                    desc: "Genera codice Scratch 3.0 pronto all'uso con la sintassi ufficiale italiana dei blocchi, adattando la complessità dall'infanzia/primaria fino alla secondaria di secondo grado."
+                },
+                {
+                    cat: "EduCreate",
+                    title: "Maestro di Rebus",
+                    desc: "Per italiano L1/L2. Costruisce rebus enigmistici, genera il prompt visivo in inglese per IA visiva (es. Nano Banana / DALL-E) e indica la finalizzazione su Canva."
+                },
+                {
+                    cat: "EduInclude",
+                    title: "Visual Instructional Designer",
+                    desc: "Analizza il PDF di un'unità didattica, pone 6 domande UDL/accessibilità e genera il prompt pronto per la sezione Infografica di NotebookLM."
+                }
+            ];
+            const eSeraContainer = document.getElementById('edugems-sera-container');
+            eduGemsSera.forEach(gem => {
+                eSeraContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm prompt-card flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded">${gem.cat}</span>
+                            <h4 class="font-bold text-slate-900 text-sm my-2 text-rose-900">${gem.title}</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">${gem.desc}</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                            <i data-lucide="globe" class="w-3.5 h-3.5 text-rose-500"></i> Blog: emiliasera.edublogs.org
                         </div>
                     </div>
                 `;
